@@ -1,0 +1,89 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Code2, Github } from "lucide-react";
+import { useState, useEffect } from "react";
+
+export function Navbar() {
+    const pathname = usePathname();
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 0);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    return (
+        <header
+            className={cn(
+                "sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-200",
+                isScrolled ? "bg-background/80 border-border" : "bg-transparent border-transparent"
+            )}
+        >
+            <div className="container flex h-16 items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+                        <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
+                            <Code2 className="h-5 w-5" />
+                        </div>
+                        <span>DSA Share</span>
+                    </Link>
+                </div>
+
+                <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+                    <Link
+                        href="/"
+                        className={cn(
+                            "transition-colors hover:text-primary",
+                            pathname === "/" ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
+                        Patterns
+                    </Link>
+                    <Link
+                        href="/roadmap"
+                        className={cn(
+                            "transition-colors hover:text-primary",
+                            pathname === "/roadmap" ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
+                        Roadmap
+                    </Link>
+                    <Link
+                        href="/think"
+                        className={cn(
+                            "transition-colors hover:text-primary",
+                            pathname === "/think" ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
+                        Think
+                    </Link>
+                    <Link
+                        href="/about"
+                        className={cn(
+                            "transition-colors hover:text-primary",
+                            pathname === "/about" ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
+                        About
+                    </Link>
+                </nav>
+
+                <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+                        <Github className="h-5 w-5" />
+                    </Button>
+                    <Button variant="default" size="sm" className="hidden sm:flex">
+                        Sign In
+                    </Button>
+                </div>
+            </div>
+        </header>
+    );
+}
