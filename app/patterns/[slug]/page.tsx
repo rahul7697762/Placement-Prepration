@@ -89,7 +89,7 @@ export default function PatternPage() {
             {/* Background decoration */}
             <div className="absolute top-0 right-0 w-[800px] h-[600px] bg-primary/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
 
-            <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
+            <div className="container mx-auto px-8 md:px-12 py-8 max-w-5xl space-y-8">
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}

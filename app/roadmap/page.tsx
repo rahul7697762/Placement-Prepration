@@ -111,7 +111,7 @@ export default function RoadmapPage() {
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] -z-10 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px] -z-10 pointer-events-none" />
 
-            <div className="container mx-auto px-4 py-16 max-w-4xl">
+            <div className="container mx-auto px-8 md:px-12 py-16 max-w-5xl">
                 <div className="text-center space-y-6 mb-16">
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}

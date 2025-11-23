@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Code2, Github } from "lucide-react";
 import { useState, useEffect } from "react";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export function Navbar() {
     const pathname = usePathname();
@@ -26,7 +27,7 @@ export function Navbar() {
                 isScrolled ? "bg-background/80 border-border" : "bg-transparent border-transparent"
             )}
         >
-            <div className="container flex h-16 items-center justify-between">
+            <div className="container mx-auto px-8 md:px-12 flex h-16 items-center justify-between">
                 <div className="flex items-center gap-2">
                     <Link href="/" className="flex items-center gap-2 font-bold text-xl">
                         <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
@@ -76,6 +77,7 @@ export function Navbar() {
                 </nav>
 
                 <div className="flex items-center gap-2">
+                    <ModeToggle />
                     <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
                         <Github className="h-5 w-5" />
                     </Button>

@@ -12,7 +12,7 @@ export default function ThinkPage() {
                 <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[120px]" />
             </div>
 
-            <div className="container mx-auto px-4 py-16 space-y-16">
+            <div className="container mx-auto px-8 md:px-12 py-16 space-y-16">
                 <div className="text-center space-y-6 max-w-3xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
