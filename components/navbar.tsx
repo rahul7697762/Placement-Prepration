@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Code2, Github } from "lucide-react";
 import { useState, useEffect } from "react";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { ModeToggle } from "@/components/mode-toggle";
 
 export function Navbar() {
@@ -45,8 +46,28 @@ export function Navbar() {
                             pathname === "/" ? "text-primary" : "text-muted-foreground"
                         )}
                     >
+                        Home
+                    </Link>
+                    <Link
+                        href="/patterns"
+                        className={cn(
+                            "transition-colors hover:text-primary",
+                            pathname.startsWith("/patterns") ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
                         Patterns
                     </Link>
+                    <SignedIn>
+                        <Link
+                            href="/dashboard"
+                            className={cn(
+                                "transition-colors hover:text-primary",
+                                pathname === "/dashboard" ? "text-primary" : "text-muted-foreground"
+                            )}
+                        >
+                            Dashboard
+                        </Link>
+                    </SignedIn>
                     <Link
                         href="/roadmap"
                         className={cn(
@@ -65,15 +86,6 @@ export function Navbar() {
                     >
                         Think
                     </Link>
-                    <Link
-                        href="/about"
-                        className={cn(
-                            "transition-colors hover:text-primary",
-                            pathname === "/about" ? "text-primary" : "text-muted-foreground"
-                        )}
-                    >
-                        About
-                    </Link>
                 </nav>
 
                 <div className="flex items-center gap-2">
@@ -81,9 +93,16 @@ export function Navbar() {
                     <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
                         <Github className="h-5 w-5" />
                     </Button>
-                    <Button variant="default" size="sm" className="hidden sm:flex">
-                        Sign In
-                    </Button>
+                    <SignedOut>
+                        <SignInButton mode="modal">
+                            <Button variant="default" size="sm" className="hidden sm:flex">
+                                Sign In
+                            </Button>
+                        </SignInButton>
+                    </SignedOut>
+                    <SignedIn>
+                        <UserButton />
+                    </SignedIn>
                 </div>
             </div>
         </header>

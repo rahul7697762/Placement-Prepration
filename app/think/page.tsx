@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Lightbulb, Brain, Pencil, Share2 } from "lucide-react";
 
+import { GridVisualizer } from "@/components/grid-visualizer";
+
 export default function ThinkPage() {
     return (
         <main className="min-h-screen bg-background relative overflow-hidden">
@@ -77,14 +79,16 @@ export default function ThinkPage() {
                 </div>
 
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
-                    className="text-center p-12 border border-dashed border-border rounded-3xl bg-secondary/5"
+                    className="space-y-8"
                 >
-                    <p className="text-muted-foreground">
-                        Interactive whiteboard and scratchpad coming soon...
-                    </p>
+                    <div className="text-center space-y-2">
+                        <h2 className="text-2xl font-bold">Algorithm Visualizer</h2>
+                        <p className="text-muted-foreground">Visualize Breadth-First Search (BFS) in action.</p>
+                    </div>
+                    <GridVisualizer />
                 </motion.div>
             </div>
         </main>

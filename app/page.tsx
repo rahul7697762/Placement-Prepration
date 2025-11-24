@@ -1,9 +1,8 @@
 "use client";
 
-import { PatternCard } from "@/components/pattern-card";
-import { initialPatterns } from "@/lib/data";
+import { PatternGrid } from "@/components/pattern-grid";
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, CheckCircle, Target, TrendingUp, Users, Zap } from "lucide-react";
+import { ArrowRight, Target, TrendingUp, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -33,13 +32,13 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Button size="lg" className="h-12 px-8 text-lg" asChild>
-              <Link href="/roadmap">
-                Start Learning <ArrowRight className="ml-2 h-5 w-5" />
+              <Link href="/patterns">
+                Explore Patterns <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="h-12 px-8 text-lg" asChild>
-              <Link href="/think">
-                Explore Think Space
+              <Link href="/dashboard">
+                View Dashboard
               </Link>
             </Button>
           </div>
@@ -95,32 +94,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Popular Patterns Section */}
-      <section className="container mx-auto px-8 md:px-12 py-24 space-y-16">
+      {/* Patterns Grid Section */}
+      <section className="container mx-auto px-8 md:px-12 py-24 space-y-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="space-y-2 text-center md:text-left">
-            <h2 className="text-3xl md:text-4xl font-bold">Popular Patterns</h2>
-            <p className="text-muted-foreground">Start with these high-yield interview patterns.</p>
+            <h2 className="text-3xl md:text-4xl font-bold">Explore Patterns</h2>
+            <p className="text-muted-foreground">Master these fundamental coding patterns.</p>
           </div>
-          <Button variant="ghost" className="group" asChild>
-            <Link href="/roadmap">
-              View Full Roadmap <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </Button>
+          <Link href="/patterns">
+            <Button variant="outline" className="group">
+              View All Patterns <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {initialPatterns.slice(0, 6).map((pattern, index) => (
-            <PatternCard
-              key={pattern.id}
-              title={pattern.title}
-              description={pattern.description}
-              slug={pattern.slug}
-              count={pattern.questions.length}
-              index={index}
-            />
-          ))}
-        </div>
+        <PatternGrid />
       </section>
 
       {/* How It Works Section */}
@@ -160,7 +148,7 @@ export default function Home() {
               Join thousands of developers mastering Data Structures and Algorithms the right way.
             </p>
             <Button size="lg" variant="secondary" className="h-14 px-8 text-lg font-semibold" asChild>
-              <Link href="/roadmap">
+              <Link href="/patterns">
                 Get Started for Free
               </Link>
             </Button>

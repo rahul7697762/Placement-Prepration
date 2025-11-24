@@ -27,6 +27,7 @@ import {
 import { CheckCircle2, Circle, ExternalLink, Plus, ArrowLeft, Trophy } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { useUserProgress } from "@/hooks/use-user-progress";
 
 
 export default function PatternPage() {
@@ -35,6 +36,7 @@ export default function PatternPage() {
     const [pattern, setPattern] = useState<Pattern | undefined>(undefined);
     const [questions, setQuestions] = useState<Question[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const { isQuestionComplete, toggleComplete, loading: progressLoading } = useUserProgress();
 
     // Form state
     const [newQuestionTitle, setNewQuestionTitle] = useState("");
@@ -69,19 +71,18 @@ export default function PatternPage() {
         setIsDialogOpen(false);
     };
 
-    const toggleCompletion = (id: string) => {
-        setQuestions(
-            questions.map((q) =>
-                q.id === id ? { ...q, completed: !q.completed } : q
-            )
-        );
+    const toggleCompletion = async (id: string) => {
+        if (!pattern) return;
+
+        const currentlyComplete = isQuestionComplete(id);
+        await toggleComplete(id, pattern.slug, !currentlyComplete);
     };
 
     if (!pattern) {
         return <div className="p-8 text-center text-muted-foreground">Pattern not found</div>;
     }
 
-    const completedCount = questions.filter(q => q.completed).length;
+    const completedCount = questions.filter(q => isQuestionComplete(q.id)).length;
     const progress = questions.length > 0 ? (completedCount / questions.length) * 100 : 0;
 
     return (
@@ -191,59 +192,62 @@ export default function PatternPage() {
                                         No questions added yet. Be the first to add one!
                                     </motion.div>
                                 ) : (
-                                    questions.map((question, index) => (
-                                        <motion.div
-                                            key={question.id}
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, scale: 0.95 }}
-                                            transition={{ delay: index * 0.05 }}
-                                        >
-                                            <Card className={`group transition-all duration-300 hover:shadow-md border-border/50 ${question.completed ? 'bg-secondary/30' : 'bg-card'}`}>
-                                                <CardContent className="p-4 flex items-center justify-between gap-4">
-                                                    <div className="flex items-center gap-4 flex-1">
-                                                        <button
-                                                            onClick={() => toggleCompletion(question.id)}
-                                                            className={`transition-all duration-300 ${question.completed ? "text-green-500 scale-110" : "text-muted-foreground hover:text-primary hover:scale-110"}`}
-                                                        >
-                                                            {question.completed ? (
-                                                                <CheckCircle2 className="h-6 w-6" />
-                                                            ) : (
-                                                                <Circle className="h-6 w-6" />
-                                                            )}
-                                                        </button>
-                                                        <div className="flex-1">
-                                                            <h3 className={`font-medium text-lg transition-all duration-300 ${question.completed ? "line-through text-muted-foreground" : "text-foreground"}`}>
-                                                                {question.title}
-                                                            </h3>
-                                                            <div className="flex items-center gap-3 mt-1.5">
-                                                                <Badge
-                                                                    variant={
-                                                                        question.difficulty === "Easy"
-                                                                            ? "secondary"
-                                                                            : question.difficulty === "Medium"
-                                                                                ? "default"
-                                                                                : "destructive"
-                                                                    }
-                                                                    className={`text-xs px-2 py-0.5 ${question.difficulty === "Easy" ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" : question.difficulty === "Medium" ? "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20" : "bg-red-500/10 text-red-500 hover:bg-red-500/20"}`}
-                                                                >
-                                                                    {question.difficulty}
-                                                                </Badge>
+                                    questions.map((question, index) => {
+                                        const completed = isQuestionComplete(question.id);
+                                        return (
+                                            <motion.div
+                                                key={question.id}
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, scale: 0.95 }}
+                                                transition={{ delay: index * 0.05 }}
+                                            >
+                                                <Card className={`group transition-all duration-300 hover:shadow-md border-border/50 ${completed ? 'bg-secondary/30' : 'bg-card'}`}>
+                                                    <CardContent className="p-4 flex items-center justify-between gap-4">
+                                                        <div className="flex items-center gap-4 flex-1">
+                                                            <button
+                                                                onClick={() => toggleCompletion(question.id)}
+                                                                className={`transition-all duration-300 ${completed ? "text-green-500 scale-110" : "text-muted-foreground hover:text-primary hover:scale-110"}`}
+                                                            >
+                                                                {completed ? (
+                                                                    <CheckCircle2 className="h-6 w-6" />
+                                                                ) : (
+                                                                    <Circle className="h-6 w-6" />
+                                                                )}
+                                                            </button>
+                                                            <div className="flex-1">
+                                                                <h3 className={`font-medium text-lg transition-all duration-300 ${completed ? "line-through text-muted-foreground" : "text-foreground"}`}>
+                                                                    {question.title}
+                                                                </h3>
+                                                                <div className="flex items-center gap-3 mt-1.5">
+                                                                    <Badge
+                                                                        variant={
+                                                                            question.difficulty === "Easy"
+                                                                                ? "secondary"
+                                                                                : question.difficulty === "Medium"
+                                                                                    ? "default"
+                                                                                    : "destructive"
+                                                                        }
+                                                                        className={`text-xs px-2 py-0.5 ${question.difficulty === "Easy" ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" : question.difficulty === "Medium" ? "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20" : "bg-red-500/10 text-red-500 hover:bg-red-500/20"}`}
+                                                                    >
+                                                                        {question.difficulty}
+                                                                    </Badge>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <a
-                                                        href={question.link}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="p-2 rounded-full hover:bg-secondary transition-colors text-muted-foreground hover:text-primary"
-                                                    >
-                                                        <ExternalLink className="h-5 w-5" />
-                                                    </a>
-                                                </CardContent>
-                                            </Card>
-                                        </motion.div>
-                                    ))
+                                                        <a
+                                                            href={question.link}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="p-2 rounded-full hover:bg-secondary transition-colors text-muted-foreground hover:text-primary"
+                                                        >
+                                                            <ExternalLink className="h-5 w-5" />
+                                                        </a>
+                                                    </CardContent>
+                                                </Card>
+                                            </motion.div>
+                                        )
+                                    })
                                 )}
                             </AnimatePresence>
                         </div>
