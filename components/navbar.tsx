@@ -86,6 +86,15 @@ export function Navbar() {
                     >
                         Think
                     </Link>
+                    <Link
+                        href="/compiler"
+                        className={cn(
+                            "transition-colors hover:text-primary",
+                            pathname === "/compiler" ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
+                        Compiler
+                    </Link>
                 </nav>
 
                 <div className="flex items-center gap-2">
