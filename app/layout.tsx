@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${inter.className} min-h-screen bg-background antialiased flex flex-col`}>
+        <body className={`${inter.className} min-h-screen bg-background antialiased flex flex-col`} suppressHydrationWarning>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

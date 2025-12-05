@@ -32,75 +32,15 @@ const roadmapData: RoadmapPhase[] = [
         isTrack: true,
     },
     {
-        title: "1. Warm-Up (Basics)",
-        description: "Goal: Get comfortable writing simple logic.",
+        title: "DSA Pattern Cheatsheet 2025",
+        description: "Master 15 essential coding patterns with curated LeetCode problems.",
         topics: [
-            { name: "Variables, loops, conditionals" },
-            { name: "Functions, recursion basics" },
-            { name: "Time & Space Complexity" },
+            { name: "Prefix Sum, Two Pointers" },
+            { name: "Sliding Window, Heaps" },
+            { name: "Graphs, DP & Backtracking" },
         ],
-    },
-    {
-        title: "2. Core Data Structures",
-        description: "Build a strong foundation with essential data structures.",
-        topics: [
-            {
-                name: "Arrays & Strings",
-                details: ["Traversal", "Two-pointer", "Sliding window"],
-            },
-            {
-                name: "Hashing",
-                details: ["HashMap", "HashSet", "Frequency counting"],
-            },
-            {
-                name: "Linked List & Stack/Queue",
-                details: ["Traversal", "LIFO/FIFO principles"],
-            },
-        ],
-    },
-    {
-        title: "3. Intermediate Core",
-        description: "Step up to more complex structures and algorithms.",
-        topics: [
-            {
-                name: "Trees & BST",
-                details: ["Traversals", "Height/Depth", "Search"],
-            },
-            {
-                name: "Recursion & Backtracking",
-                details: ["Subsets", "Permutations", "Maze problems"],
-            },
-        ],
-    },
-    {
-        title: "4. Algorithms",
-        description: "Master fundamental algorithms for sorting and searching.",
-        topics: [
-            {
-                name: "Sorting & Searching",
-                details: ["Merge/Quick Sort", "Binary Search"],
-            },
-        ],
-    },
-    {
-        title: "5. Graph Theory",
-        description: "Introduction to graphs and basic traversal algorithms.",
-        topics: [
-            {
-                name: "Graph Basics",
-                details: ["BFS", "DFS", "Adjacency list"],
-            },
-        ],
-    },
-    {
-        title: "6. DP Starter",
-        description: "Don’t start advanced DP early. Just master the basics.",
-        topics: [
-            {
-                name: "Dynamic Programming",
-                details: ["Fibonacci", "Climbing stairs", "Memoization"],
-            },
-        ],
+        link: "/roadmap/dsa-patterns",
+        isTrack: true,
     },
 ];
 

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { getUserProgress, toggleQuestionComplete, UserProgress } from "@/lib/supabase";
 
 export function useUserProgress() {
     const { user } = useUser();
+    const { getToken } = useAuth();
     const [progress, setProgress] = useState<UserProgress[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -16,13 +17,20 @@ export function useUserProgress() {
                 return;
             }
 
-            const data = await getUserProgress(user.id);
+            let token;
+            try {
+                token = await getToken({ template: 'supabase' });
+            } catch (err) {
+                token = await getToken();
+            }
+
+            const data = await getUserProgress(user.id, token || undefined);
             setProgress(data);
             setLoading(false);
         }
 
         loadProgress();
-    }, [user?.id]);
+    }, [user?.id, getToken]);
 
     const toggleComplete = async (
         questionId: string,
@@ -31,16 +39,25 @@ export function useUserProgress() {
     ) => {
         if (!user?.id) return false;
 
+        let token;
+        try {
+            token = await getToken({ template: 'supabase' });
+        } catch (err) {
+            token = await getToken();
+        }
+
         const success = await toggleQuestionComplete(
             user.id,
             questionId,
             patternSlug,
-            completed
+            completed,
+            token || undefined
         );
 
         if (success) {
             // Update local state
-            const data = await getUserProgress(user.id);
+            // Re-fetching is safer to stay in sync
+            const data = await getUserProgress(user.id, token || undefined);
             setProgress(data);
         }
 
