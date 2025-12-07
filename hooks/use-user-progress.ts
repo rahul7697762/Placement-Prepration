@@ -21,7 +21,7 @@ export function useUserProgress() {
             try {
                 token = await getToken({ template: 'supabase' });
             } catch (err) {
-                token = await getToken();
+                console.warn("Failed to get Supabase token", err);
             }
 
             const data = await getUserProgress(user.id, token || undefined);
@@ -43,7 +43,7 @@ export function useUserProgress() {
         try {
             token = await getToken({ template: 'supabase' });
         } catch (err) {
-            token = await getToken();
+            console.warn("Failed to get Supabase token", err);
         }
 
         const success = await toggleQuestionComplete(

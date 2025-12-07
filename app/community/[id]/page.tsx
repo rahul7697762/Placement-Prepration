@@ -28,7 +28,12 @@ export default function PostDetailPage() {
 
     const loadData = async () => {
         try {
-            const token = await getToken({ template: 'supabase' }) || await getToken();
+            let token;
+            try {
+                token = await getToken({ template: 'supabase' });
+            } catch (err) {
+                console.warn("Failed to get Supabase token", err);
+            }
             const [postData, commentsData] = await Promise.all([
                 fetchPostById(id as string, token || undefined),
                 fetchComments(id as string, token || undefined)
@@ -48,7 +53,12 @@ export default function PostDetailPage() {
 
         setIsSubmitting(true);
         try {
-            const token = await getToken({ template: 'supabase' }) || await getToken();
+            let token;
+            try {
+                token = await getToken({ template: 'supabase' });
+            } catch (err) {
+                console.warn("Failed to get Supabase token", err);
+            }
             const comment = await createComment({
                 post_id: post.id,
                 content: newComment,

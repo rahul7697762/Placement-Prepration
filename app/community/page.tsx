@@ -30,7 +30,12 @@ export default function CommunityPage() {
     const loadPosts = async () => {
         try {
             setLoading(true);
-            const token = await getToken({ template: "supabase" });
+            let token;
+            try {
+                token = await getToken({ template: "supabase" });
+            } catch (err) {
+                console.warn("Failed to get Supabase token", err);
+            }
             const data = await fetchPosts(token || undefined);
             if (data) {
                 setPosts(data);
@@ -47,7 +52,12 @@ export default function CommunityPage() {
 
         try {
             setIsSubmitting(true);
-            const token = await getToken({ template: "supabase" });
+            let token;
+            try {
+                token = await getToken({ template: "supabase" });
+            } catch (err) {
+                console.warn("Failed to get Supabase token", err);
+            }
 
             const postData = {
                 title: newTitle,
