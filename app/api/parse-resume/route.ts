@@ -1,12 +1,20 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
-const pdf = require('pdf-parse');
 
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GOOGLE_AI_API_KEY || 'AIzaSyDYTsw4WknRsNUhYl_VLSD-axom80utcz4');
+
+// Dynamic import for pdf-parse to avoid canvas dependency issues at build time
+const getPdfParser = async () => {
+    try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const pdfParse = await import('pdf-parse') as any;
+        return pdfParse.default || pdfParse;
+    } catch (e) {
+        console.warn('pdf-parse not available:', e);
+        return null;
+    }
+};
 
 export async function POST(req: NextRequest) {
     try {
@@ -21,6 +29,10 @@ export async function POST(req: NextRequest) {
 
         let text = '';
         try {
+            const pdf = await getPdfParser();
+            if (!pdf) {
+                return NextResponse.json({ error: 'PDF parser not available' }, { status: 500 });
+            }
             const data = await pdf(buffer);
             text = data.text;
         } catch (e) {
