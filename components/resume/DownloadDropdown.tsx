@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx';
 import { saveAs } from 'file-saver';
-//import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { ResumeService } from '../../services/resumeService';
 import { ResumeData, ResumeColor } from '../../types/resume';
-import { useAuth, useUser } from '@clerk/nextjs';
+import html2canvas from 'html2canvas';
 
 interface DownloadDropdownProps {
   data: ResumeData;
@@ -24,9 +24,7 @@ const DownloadDropdown: React.FC<DownloadDropdownProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { user } = useUser();
-  const refreshUser = async () => { await user?.reload(); };
-
+  const { user } = useAuth();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -58,7 +56,7 @@ const DownloadDropdown: React.FC<DownloadDropdownProps> = ({
         data,
         templateId,
         color || { primary: '#000000', background: '#ffffff' },
-        user.id.toString(),
+        user.user_id.toString(),
         resumeId
       );
       console.log('Resume saved successfully:', savedResume);
@@ -67,37 +65,10 @@ const DownloadDropdown: React.FC<DownloadDropdownProps> = ({
     }
   };
 
-  // Helper to deduct credits
-  const deductCredits = async () => {
-    if (!user) return true;
-    try {
-      const res = await fetch('/api/credits/deduct', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, amount: 10, action: 'resume_download' })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || 'Insufficient credits');
-        return false;
-      }
 
-      // Update UI credits
-      await refreshUser();
-
-      return true;
-    } catch (err) {
-      console.error('Credit error:', err);
-      alert('Failed to check credits');
-      return false;
-    }
-  };
 
   // Hybrid PDF - Visual design with invisible searchable text layer (works with ATS)
   const handleDownloadPDF = async () => {
-    // Check credits first
-    // const hasCredits = await deductCredits();
-    // if (!hasCredits) return;
 
     setIsDownloading(true);
     setIsOpen(false);
@@ -118,141 +89,103 @@ const DownloadDropdown: React.FC<DownloadDropdownProps> = ({
 
       console.log('Generating hybrid PDF (visual + searchable text)...');
 
-      // Clone the element to avoid modifying the original
-      const clonedElement = element.cloneNode(true) as HTMLElement;
+      // Capture visual design as image using html-to-image (supports modern CSS colors)
+      const imgData = await toPng(element, {
+        quality: 0.95,
+        pixelRatio: 2,
+        backgroundColor: '#ffffff',
+        cacheBust: true,
+      });
 
-      // Create a temporary container
-      const tempContainer = document.createElement('div');
-      tempContainer.style.position = 'absolute';
-      tempContainer.style.left = '-9999px';
-      tempContainer.style.top = '0';
-      tempContainer.style.width = element.offsetWidth + 'px';
-      tempContainer.style.background = '#ffffff';
-      tempContainer.appendChild(clonedElement);
-      document.body.appendChild(tempContainer);
+      // Create an image to get dimensions
+      const img = new Image();
+      img.src = imgData;
+      await new Promise((resolve) => {
+        img.onload = resolve;
+      });
 
-      // Function to inline all computed styles and fix lab() colors
-      const inlineStyles = (el: HTMLElement) => {
-        const computedStyle = window.getComputedStyle(el);
-        const importantStyles = [
-          'color', 'background-color', 'background', 'border-color',
-          'border-top-color', 'border-bottom-color', 'border-left-color', 'border-right-color',
-          'font-family', 'font-size', 'font-weight', 'line-height', 'text-align',
-          'padding', 'margin', 'width', 'height', 'display', 'flex-direction',
-          'justify-content', 'align-items', 'gap', 'border-radius', 'box-shadow'
-        ];
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+        compress: true
+      });
 
-        importantStyles.forEach(prop => {
-          let value = computedStyle.getPropertyValue(prop);
-          if (value && value.includes('lab(')) {
-            value = prop === 'color' ? '#000000' : prop.includes('background') ? '#ffffff' : '#cccccc';
+      const pageWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
+      const marginLR = 10; // Left/Right margin in mm
+      const marginTB = 5; // Top/Bottom margin in mm
+      const availableWidth = pageWidth - (marginLR * 2);
+      const availableHeight = pageHeight - (marginTB * 2);
+
+      // Calculate dimensions to fit on single A4 page
+      let imgWidth = availableWidth;
+      let imgHeight = (img.height * imgWidth) / img.width;
+
+      // If image is taller than available height, scale down to fit
+      if (imgHeight > availableHeight) {
+        const scale = availableHeight / imgHeight;
+        imgHeight = availableHeight;
+        imgWidth = imgWidth * scale;
+      }
+
+      // Center horizontally if scaled down
+      const xPos = marginLR + (availableWidth - imgWidth) / 2;
+
+      // Add image layer - fits on single A4 page
+      pdf.addImage(imgData, 'PNG', xPos, marginTB, imgWidth, imgHeight, undefined, 'FAST');
+
+      // Now add INVISIBLE text layer for ATS parsing
+      // This text will be searchable but not visible
+      pdf.setTextColor(255, 255, 255); // White text (invisible on white background)
+      pdf.setFontSize(1); // Tiny font
+
+      const margin = 10;
+      let yPos = margin;
+
+      // Helper to add invisible text
+      const addInvisibleText = (text: string) => {
+        if (!text || text.trim().length === 0) return;
+        const lines = pdf.splitTextToSize(text, imgWidth - (margin * 2));
+        lines.forEach((line: string) => {
+          if (yPos > pageHeight - margin) {
+            // Text continues on visual but we keep it on first page for ATS
+            yPos = margin;
           }
-          if (value && value.includes('oklch(')) {
-            value = prop === 'color' ? '#000000' : prop.includes('background') ? '#ffffff' : '#cccccc';
-          }
-          el.style.setProperty(prop, value, 'important');
-        });
-        el.style.setProperty('box-shadow', 'none', 'important');
-        Array.from(el.children).forEach(child => {
-          if (child instanceof HTMLElement) inlineStyles(child);
+          pdf.text(line, margin, yPos);
+          yPos += 0.5;
         });
       };
 
-      inlineStyles(clonedElement);
+      // Add all resume content as invisible searchable text
+      if (data.contact?.name) addInvisibleText(data.contact.name);
+      if (data.contact?.email) addInvisibleText(data.contact.email);
+      if (data.contact?.phone) addInvisibleText(data.contact.phone);
+      if (data.contact?.address) addInvisibleText(data.contact.address);
+      if (data.contact?.linkedin) addInvisibleText(data.contact.linkedin);
+      if (data.contact?.github) addInvisibleText(data.contact.github);
+      if (data.objective) addInvisibleText(data.objective);
+      if (data.skills) addInvisibleText(data.skills.join(' '));
 
-      try {
-        await new Promise(resolve => setTimeout(resolve, 200));
+      data.internship?.forEach((exp: any) => {
+        addInvisibleText(`${exp.position || ''} ${exp.company || ''} ${exp.year || ''} ${exp.description || ''}`);
+      });
 
-        // Capture visual design as image
-        const canvas = await html2canvas(clonedElement, {
-          scale: 1.5,
-          useCORS: true,
-          logging: false,
-          backgroundColor: '#ffffff',
-          allowTaint: true,
-          foreignObjectRendering: false,
-          removeContainer: false
-        });
+      data.education?.forEach((edu: any) => {
+        addInvisibleText(`${edu.course || ''} ${edu.institution || ''} ${edu.year || ''} ${edu.description || ''}`);
+      });
 
-        const imgData = canvas.toDataURL('image/jpeg', 0.75);
-        const pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'mm',
-          format: 'a4',
-          compress: true
-        });
+      data.projects?.forEach((proj: any) => {
+        addInvisibleText(`${proj.title || ''} ${proj.description || ''} ${proj.technologies || ''}`);
+      });
 
-        const imgWidth = 210;
-        const pageHeight = 297;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      data.certifications?.forEach((cert: any) => {
+        addInvisibleText(`${cert.course || ''} ${cert.institution || ''} ${cert.year || ''}`);
+      });
 
-        // Add image layer first
-        pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight, undefined, 'MEDIUM');
-
-        // Now add INVISIBLE text layer for ATS parsing
-        // This text will be searchable but not visible
-        pdf.setTextColor(255, 255, 255); // White text (invisible on white background)
-        pdf.setFontSize(1); // Tiny font
-
-        const margin = 10;
-        let yPos = margin;
-
-        // Helper to add invisible text
-        const addInvisibleText = (text: string) => {
-          if (!text || text.trim().length === 0) return;
-          const lines = pdf.splitTextToSize(text, imgWidth - (margin * 2));
-          lines.forEach((line: string) => {
-            if (yPos > pageHeight - margin) {
-              // Text continues on visual but we keep it on first page for ATS
-              yPos = margin;
-            }
-            pdf.text(line, margin, yPos);
-            yPos += 0.5;
-          });
-        };
-
-        // Add all resume content as invisible searchable text
-        if (data.contact?.name) addInvisibleText(data.contact.name);
-        if (data.contact?.email) addInvisibleText(data.contact.email);
-        if (data.contact?.phone) addInvisibleText(data.contact.phone);
-        if (data.contact?.address) addInvisibleText(data.contact.address);
-        if (data.contact?.linkedin) addInvisibleText(data.contact.linkedin);
-        if (data.contact?.github) addInvisibleText(data.contact.github);
-        if (data.objective) addInvisibleText(data.objective);
-        if (data.skills) addInvisibleText(data.skills.join(' '));
-
-        data.internship?.forEach((exp: any) => {
-          addInvisibleText(`${exp.position || ''} ${exp.company || ''} ${exp.year || ''} ${exp.description || ''}`);
-        });
-
-        data.education?.forEach((edu: any) => {
-          addInvisibleText(`${edu.course || ''} ${edu.institution || ''} ${edu.year || ''} ${edu.description || ''}`);
-        });
-
-        data.projects?.forEach((proj: any) => {
-          addInvisibleText(`${proj.title || ''} ${proj.description || ''} ${proj.technologies || ''}`);
-        });
-
-        data.certifications?.forEach((cert: any) => {
-          addInvisibleText(`${cert.course || ''} ${cert.institution || ''} ${cert.year || ''}`);
-        });
-
-        // Handle multi-page if image is larger than one page
-        let heightLeft = imgHeight - pageHeight;
-        let position = -pageHeight;
-
-        while (heightLeft > 0) {
-          pdf.addPage();
-          pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight, undefined, 'MEDIUM');
-          heightLeft -= pageHeight;
-          position -= pageHeight;
-        }
-
-        pdf.save(`${data.contact?.name?.replace(/\s+/g, '_') || 'resume'}.pdf`);
-        console.log('Hybrid PDF downloaded successfully');
-      } finally {
-        document.body.removeChild(tempContainer);
-      }
+      // Single page A4 PDF - content is scaled to fit
+      pdf.save(`${data.contact?.name?.replace(/\s+/g, '_') || 'resume'}.pdf`);
+      console.log('Hybrid PDF downloaded successfully');
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert(`Failed to generate PDF: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -264,10 +197,6 @@ const DownloadDropdown: React.FC<DownloadDropdownProps> = ({
 
 
   const handleDownloadDOC = async () => {
-    // Check credits first
-    // const hasCredits = await deductCredits();
-    // if (!hasCredits) return;
-
     setIsDownloading(true);
     setIsOpen(false);
 
@@ -339,10 +268,10 @@ const DownloadDropdown: React.FC<DownloadDropdownProps> = ({
                 ]),
               ] : []),
 
-              // Internship
+              // Experience
               ...(data.internship && data.internship.length > 0 ? [
                 new Paragraph({
-                  text: 'INTERNSHIP',
+                  text: 'EXPERIENCE',
                   heading: HeadingLevel.HEADING_2,
                   spacing: { before: 200, after: 200 },
                 }),

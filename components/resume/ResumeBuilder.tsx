@@ -176,8 +176,8 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
         if (resumeId) {
             setLoading(true);
             ResumeService.getResume(resumeId).then(fetched => {
-                if (fetched) {
-                    setData(fetched);
+                if (fetched && fetched.resume_data) {
+                    setData(fetched.resume_data);
                     if (fetched.color_scheme) setColor(fetched.color_scheme);
                 }
                 setLoading(false);
@@ -260,7 +260,6 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
                             data={data}
                             templateId={selectedTemplate}
                             color={color}
-                            resumeId={resumeId}
                         />
                     </div>
                 </div>
@@ -268,7 +267,7 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
                 {/* Resume Canvas Area */}
                 <div className="flex-1 overflow-auto p-8 flex justify-center items-start custom-scrollbar">
                     <div className="shadow-2xl print:shadow-none bg-white rounded-lg overflow-hidden transition-transform duration-300 origin-top">
-                        <div ref={componentRef} style={{ width: '210mm', minHeight: '297mm', transform: 'scale(1)', transformOrigin: 'top center' }}>
+                        <div id="resume-preview" ref={componentRef} style={{ width: '210mm', minHeight: '297mm', transform: 'scale(1)', transformOrigin: 'top center' }}>
                             <Resume
                                 data={data}
                                 color={color}
