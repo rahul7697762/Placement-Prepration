@@ -96,6 +96,15 @@ export function Navbar() {
                         Compiler
                     </Link>
                     <Link
+                        href="/resume-builder"
+                        className={cn(
+                            "transition-colors hover:text-primary",
+                            pathname === "/resume-builder" ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
+                        Resume
+                    </Link>
+                    <Link
                         href="/community"
                         className={cn(
                             "transition-colors hover:text-primary",
