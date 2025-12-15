@@ -9,6 +9,8 @@ interface FormProps {
   setColor: (color: ResumeColor) => void;
   selectedTemplate: number;
   setSelectedTemplate: (id: number) => void;
+  autoFilledFields?: Record<string, boolean>;
+  clearAutoFill?: (key: string) => void;
 }
 
 // Default structure (safety net)
@@ -41,6 +43,8 @@ const Form: React.FC<FormProps> = ({
   setColor,
   selectedTemplate,
   setSelectedTemplate,
+  autoFilledFields,
+  clearAutoFill,
 }) => {
   const safeData = { ...defaultResume, ...data };
   const [activeTab, setActiveTab] = useState('personal');
@@ -193,15 +197,28 @@ const Form: React.FC<FormProps> = ({
                 {Object.keys(safeData.contact).map((field) => (
                   field !== 'photoUrl' && (
                     <div key={field} className="space-y-1">
-                      <label className="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 tracking-wider">
-                        {field.replace(/([A-Z])/g, ' $1').trim()}
-                      </label>
+                      <div className="flex justify-between items-center mb-1">
+                        <label className="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 tracking-wider">
+                          {field.replace(/([A-Z])/g, ' $1').trim()}
+                        </label>
+                        {autoFilledFields?.[`contact.${field}`] && (
+                          <span className="px-1.5 py-0.5 text-[10px] font-medium bg-indigo-100 text-indigo-700 rounded-full animate-pulse">
+                            Auto-filled
+                          </span>
+                        )}
+                      </div>
                       <input
                         type="text"
                         name={field}
                         value={(safeData.contact as any)[field] || ""}
-                        onChange={handleContactChange}
-                        className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
+                        onChange={(e) => {
+                          handleContactChange(e);
+                          clearAutoFill?.(`contact.${field}`);
+                        }}
+                        className={`w-full px-4 py-2 rounded-lg border ${autoFilledFields?.[`contact.${field}`]
+                            ? "border-indigo-300 ring-2 ring-indigo-500/20"
+                            : "border-gray-200 dark:border-slate-700"
+                          } bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all`}
                         placeholder={`Enter your ${field}`}
                       />
                     </div>
@@ -281,9 +298,13 @@ const Form: React.FC<FormProps> = ({
             <SimpleTextArea
               title="Technical Skills"
               value={skills}
-              onChange={setSkills}
+              onChange={(val) => {
+                setSkills(val);
+                clearAutoFill?.('skills');
+              }}
               onUpdate={() => handleArrayUpdate("skills", skills)}
               placeholder="React, TypeScript, Node.js, Python..."
+              isAutoFilled={autoFilledFields?.['skills']}
             />
             <SimpleTextArea
               title="Tools & Software"
@@ -424,22 +445,34 @@ const SimpleTextArea = ({
   onChange,
   onUpdate,
   placeholder,
+  isAutoFilled,
 }: {
   title: string;
   value: string;
   onChange: (v: string) => void;
   onUpdate: () => void;
   placeholder?: string;
+  isAutoFilled?: boolean;
 }) => (
   <Section title={title}>
     <div className="space-y-3">
-      <textarea
-        rows={3}
-        className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all resize-none"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-      />
+      <div className="relative">
+        {isAutoFilled && (
+          <span className="absolute -top-8 right-0 px-2 py-0.5 text-[10px] font-medium bg-indigo-100 text-indigo-700 rounded-full animate-pulse">
+            Auto-filled
+          </span>
+        )}
+        <textarea
+          rows={3}
+          className={`w-full px-4 py-3 rounded-lg border ${isAutoFilled
+              ? "border-indigo-300 ring-2 ring-indigo-500/20"
+              : "border-gray-200 dark:border-slate-700"
+            } bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all resize-none`}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+        />
+      </div>
       <div className="flex justify-end gap-2">
         <button
           onClick={() => onChange("")}

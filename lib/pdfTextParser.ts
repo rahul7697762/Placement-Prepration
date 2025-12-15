@@ -1,0 +1,4 @@
+export async function parsePdfText(buffer: Buffer): Promise<string> {
+    console.warn("PDF parsing is under maintenance.");
+    return "";
+}

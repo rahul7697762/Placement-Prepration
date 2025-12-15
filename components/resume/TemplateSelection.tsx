@@ -1,6 +1,7 @@
 import React from 'react';
+import Image from 'next/image';
 
-const templates = Array.from({ length: 11 }, (_, i) => i);
+const templates = [10, ...Array.from({ length: 10 }, (_, i) => i)];
 
 interface TemplateSelectionProps {
     onTemplateSelect: (id: number) => void;
@@ -8,7 +9,7 @@ interface TemplateSelectionProps {
 
 const TemplateSelection: React.FC<TemplateSelectionProps> = ({ onTemplateSelect }) => {
     return (
-        <div className="bg-slate-50 dark:bg-slate-900 py-12 px-6 min-h-screen">
+        <div className="bg-slate-50 dark:bg-slate-900 py-12 px-6 min-h-screen font-['Times_New_Roman',_serif]">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12">
                     <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
@@ -20,16 +21,22 @@ const TemplateSelection: React.FC<TemplateSelectionProps> = ({ onTemplateSelect 
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {templates.map((id) => (
+                    {templates.map((id, index) => (
                         <div
                             key={id}
                             onClick={() => onTemplateSelect(id)}
                             className="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer border border-slate-200 dark:border-slate-700"
                         >
-                            <div className="aspect-[210/297] bg-slate-100 dark:bg-slate-900 p-4">
-                                <div className="w-full h-full bg-slate-200 dark:bg-slate-800 rounded-lg flex items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-700 group-hover:border-indigo-500/50 transition-colors">
-                                    <span className="text-slate-400 font-medium">Preview {id + 1}</span>
-                                </div>
+                            <div className="aspect-[210/297] bg-slate-100 dark:bg-slate-900 overflow-hidden relative rounded-lg border border-slate-200 dark:border-slate-700">
+                                <Image
+                                    src={`/images/resume_templates-images-${id}.${id === 10 ? 'png' : 'jpg'}`}
+                                    alt={`Resume Template ${id + 1}`}
+                                    fill
+                                    className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                    priority={index === 0}
+                                />
+                                <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors" />
                             </div>
 
                             <div className="absolute inset-0 bg-indigo-600/0 group-hover:bg-indigo-600/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">

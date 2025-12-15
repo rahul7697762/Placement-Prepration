@@ -8,7 +8,7 @@ interface TemplateProps {
 
 const Template7: React.FC<TemplateProps> = ({ data, color }) => {
   if (!data || !data.contact) return null;
-  const { contact, objective, education, skills, languages, internship } = data;
+  const { contact, objective, education, skills, languages, internship, certifications, references } = data;
 
   return (
     <div className="w-[850px] mx-auto bg-white text-gray-900 font-sans">
@@ -83,7 +83,7 @@ const Template7: React.FC<TemplateProps> = ({ data, color }) => {
 
           {/* LANGUAGES */}
           {languages && languages.length > 0 && (
-            <section>
+            <section className="mb-6">
               <h4
                 className="text-base font-semibold uppercase mb-2 border-b pb-1"
                 style={{ borderColor: color.primary, color: color.primary }}
@@ -95,6 +95,49 @@ const Template7: React.FC<TemplateProps> = ({ data, color }) => {
                   <li key={i}>{l.language}</li>
                 ))}
               </ul>
+            </section>
+          )}
+
+          {/* CERTIFICATIONS */}
+          {certifications && certifications.length > 0 && (
+            <section className="mb-6">
+              <h4
+                className="text-base font-semibold uppercase mb-2 border-b pb-1"
+                style={{ borderColor: color.primary, color: color.primary }}
+              >
+                Certifications
+              </h4>
+              <div className="space-y-2 text-sm text-gray-700">
+                {certifications.map((cert, i) => (
+                  <p key={i}>
+                    <b>{cert.course}</b>
+                    {cert.institution && ` — ${cert.institution}`}
+                    {cert.year && ` (${cert.year})`}
+                  </p>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* REFERENCES */}
+          {references && references.length > 0 && (
+            <section>
+              <h4
+                className="text-base font-semibold uppercase mb-2 border-b pb-1"
+                style={{ borderColor: color.primary, color: color.primary }}
+              >
+                References
+              </h4>
+              <div className="space-y-2 text-sm text-gray-700">
+                {references.map((ref, i) => (
+                  <div key={i}>
+                    <p className="font-semibold">{ref.name}</p>
+                    {ref.desig && <p className="text-gray-600">{ref.desig}</p>}
+                    {ref.phone && <p>📞 {ref.phone}</p>}
+                    {ref.email && <p>✉️ {ref.email}</p>}
+                  </div>
+                ))}
+              </div>
             </section>
           )}
         </aside>

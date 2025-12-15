@@ -10,7 +10,7 @@ const Template0: React.FC<Template0Props> = ({ data, color }) => {
   if (!data || !data.contact) {
     return null;
   }
-  const { contact, objective, education, internship, skills, references } = data;
+  const { contact, objective, education, internship, skills, certifications, references } = data;
 
   const show = (item?: any) =>
     item && (Array.isArray(item) ? item.length > 0 : !!item);
@@ -146,6 +146,33 @@ const Template0: React.FC<Template0Props> = ({ data, color }) => {
               <li key={index}>{skill}</li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* CERTIFICATIONS */}
+      {show(certifications) && (
+        <div className="mb-6">
+          <h2
+            className="text-lg font-semibold uppercase mb-2 border-b-2 pb-1"
+            style={{ borderColor: color.primary, color: color.primary }}
+          >
+            Certifications
+          </h2>
+          <div className="space-y-3">
+            {certifications.map((cert, index) => (
+              <div key={index}>
+                <p className="text-sm font-semibold text-gray-900">
+                  {cert.course}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {cert.institution} {cert.year && `• ${cert.year}`}
+                </p>
+                {cert.description && (
+                  <p className="text-sm text-gray-700">{cert.description}</p>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

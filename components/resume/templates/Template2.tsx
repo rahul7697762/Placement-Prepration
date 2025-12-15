@@ -8,7 +8,7 @@ interface TemplateProps {
 
 const Template2: React.FC<TemplateProps> = ({ data, color }) => {
   if (!data || !data.contact) return null;
-  const { contact, objective, skills, internship, education } = data;
+  const { contact, objective, skills, internship, education, certifications, references } = data;
 
   return (
     <div className="w-[850px] mx-auto bg-white text-gray-900 font-sans p-10">
@@ -99,7 +99,7 @@ const Template2: React.FC<TemplateProps> = ({ data, color }) => {
 
       {/* ===== EDUCATION ===== */}
       {education && education.length > 0 && (
-        <section>
+        <section className="mb-6">
           <h2
             className="text-lg font-semibold uppercase mb-3 border-b pb-1"
             style={{ borderColor: color.primary, color: color.primary }}
@@ -115,6 +115,52 @@ const Template2: React.FC<TemplateProps> = ({ data, color }) => {
                 {edu.description && (
                   <p className="text-gray-700 mt-1">{edu.description}</p>
                 )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ===== CERTIFICATIONS ===== */}
+      {certifications && certifications.length > 0 && (
+        <section className="mb-6">
+          <h2
+            className="text-lg font-semibold uppercase mb-3 border-b pb-1"
+            style={{ borderColor: color.primary, color: color.primary }}
+          >
+            Certifications
+          </h2>
+          <div className="space-y-2 text-sm text-gray-700">
+            {certifications.map((cert, i) => (
+              <div key={i}>
+                <strong className="text-gray-900">{cert.course}</strong>
+                {cert.institution && <span> — {cert.institution}</span>}
+                {cert.year && <span className="text-gray-500"> ({cert.year})</span>}
+                {cert.description && (
+                  <p className="text-gray-700 mt-1">{cert.description}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ===== REFERENCES ===== */}
+      {references && references.length > 0 && (
+        <section>
+          <h2
+            className="text-lg font-semibold uppercase mb-3 border-b pb-1"
+            style={{ borderColor: color.primary, color: color.primary }}
+          >
+            References
+          </h2>
+          <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
+            {references.map((ref, i) => (
+              <div key={i}>
+                <p className="font-semibold text-gray-900">{ref.name}</p>
+                {ref.desig && <p className="text-gray-600">{ref.desig}</p>}
+                {ref.phone && <p>📞 {ref.phone}</p>}
+                {ref.email && <p>✉️ {ref.email}</p>}
               </div>
             ))}
           </div>

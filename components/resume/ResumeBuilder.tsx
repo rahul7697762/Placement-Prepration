@@ -122,6 +122,8 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
     const uploadRef = useRef<HTMLInputElement>(null);
     const componentRef = useRef<HTMLDivElement>(null);
 
+    const [autoFilledFields, setAutoFilledFields] = useState<Record<string, boolean>>({});
+
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -136,9 +138,23 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
                 body: formData,
             });
 
-            if (!res.ok) throw new Error('Failed to parse resume');
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({}));
+                console.error('Server error details:', errorData);
+                throw new Error(errorData.error || 'Failed to parse resume');
+            }
 
             const parsedData = await res.json();
+
+            // Identify auto-filled fields
+            const newAutoFilled: Record<string, boolean> = {};
+            if (parsedData.contact?.email) newAutoFilled['contact.email'] = true;
+            if (parsedData.contact?.phone) newAutoFilled['contact.phone'] = true;
+            if (parsedData.contact?.linkedin) newAutoFilled['contact.linkedin'] = true;
+            if (parsedData.contact?.github) newAutoFilled['contact.github'] = true;
+            if (parsedData.skills?.length > 0) newAutoFilled['skills'] = true;
+
+            setAutoFilledFields(newAutoFilled);
 
             // Merge with existing structure to avoid missing fields
             const mergedData: ResumeData = {
@@ -146,7 +162,12 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
                 ...parsedData,
                 contact: {
                     ...defaultResumeData.contact,
-                    ...parsedData.contact
+                    ...parsedData.contact,
+                    // Preserve existing photo/name/position/address if they are not in parsed (parsed only has email/phone/links)
+                    name: parsedData.contact?.name || defaultResumeData.contact.name,
+                    position: parsedData.contact?.position || defaultResumeData.contact.position,
+                    address: parsedData.contact?.address || defaultResumeData.contact.address,
+                    photoUrl: defaultResumeData.contact.photoUrl,
                 },
                 // Ensure arrays are initialized if missing in parsed data
                 education: parsedData.education || [],
@@ -163,13 +184,21 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
 
             setData(mergedData);
             // alert('Resume imported successfully!');
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert('Error importing resume. Please ensure it is a readable PDF.');
+            alert(error.message || 'Error importing resume. Please ensure it is a readable PDF.');
         } finally {
             setIsImporting(false);
             if (uploadRef.current) uploadRef.current.value = '';
         }
+    };
+
+    const clearAutoFill = (key: string) => {
+        setAutoFilledFields(prev => {
+            const next = { ...prev };
+            delete next[key];
+            return next;
+        });
     };
 
     useEffect(() => {
@@ -179,6 +208,7 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
                 if (fetched && fetched.resume_data) {
                     setData(fetched.resume_data);
                     if (fetched.color_scheme) setColor(fetched.color_scheme);
+                    setAutoFilledFields({}); // Reset on load
                 }
                 setLoading(false);
             });
@@ -218,16 +248,12 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
                             onChange={handleFileUpload}
                         />
                         <button
-                            onClick={() => uploadRef.current?.click()}
-                            disabled={isImporting}
-                            className="flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-slate-600 rounded-lg transition-all text-sm font-medium disabled:opacity-50"
+                            disabled={true}
+                            className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-slate-700 text-gray-400 dark:text-gray-500 rounded-lg cursor-not-allowed text-sm font-medium"
+                            title="Feature temporarily disabled for maintenance"
                         >
-                            {isImporting ? (
-                                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                            ) : (
-                                <Upload size={18} />
-                            )}
-                            {isImporting ? 'Parsing...' : 'Import Resume'}
+                            <Upload size={18} />
+                            import resume under Maintenance
                         </button>
                     </div>
                 </div>
@@ -241,6 +267,8 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
                         setColor={setColor}
                         selectedTemplate={selectedTemplate}
                         setSelectedTemplate={() => { }} // Template switching handled by parent for now
+                        autoFilledFields={autoFilledFields}
+                        clearAutoFill={clearAutoFill}
                     />
                 </div>
             </div>
