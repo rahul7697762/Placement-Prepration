@@ -53,10 +53,14 @@ export default function SignupPage() {
         setLoading(true);
         setError(null);
 
+        const redirectTo = process.env.NEXT_PUBLIC_SITE_URL
+            ? `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/dashboard`
+            : `${window.location.origin}/auth/callback?next=/dashboard`;
+
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+                redirectTo,
             },
         });
 
