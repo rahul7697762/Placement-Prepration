@@ -5,34 +5,35 @@ export function Footer() {
     return (
         <footer className="border-t bg-background/50 backdrop-blur-sm">
             <div className="container mx-auto px-8 md:px-12 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+                    <div className="space-y-4 md:col-span-2">
                         <Link href="/" className="flex items-center gap-2 font-bold text-xl">
                             <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
                                 <Code2 className="h-5 w-5" />
                             </div>
                             <span>DSA Share</span>
                         </Link>
-                        <p className="text-sm text-muted-foreground">
-                            Master Data Structures and Algorithms pattern-wise. Built for developers, by developers.
+                        <p className="text-sm text-muted-foreground max-w-sm">
+                            The complete platform for technical interview preparation. Master patterns, build superior resumes, and practice coding all in one place.
                         </p>
+                    </div>
+
+                    <div>
+                        <h3 className="font-semibold mb-4">Platform</h3>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li><Link href="/patterns" className="hover:text-primary transition-colors">DSA Patterns</Link></li>
+                            <li><Link href="/resume-builder" className="hover:text-primary transition-colors">Resume Builder</Link></li>
+                            <li><Link href="/compiler" className="hover:text-primary transition-colors">Online Compiler</Link></li>
+                            <li><Link href="/dashboard" className="hover:text-primary transition-colors">Dashboard</Link></li>
+                        </ul>
                     </div>
 
                     <div>
                         <h3 className="font-semibold mb-4">Resources</h3>
                         <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li><Link href="/" className="hover:text-primary transition-colors">Patterns</Link></li>
-                            <li><Link href="/roadmap" className="hover:text-primary transition-colors">Roadmap</Link></li>
+                            <li><Link href="/roadmap" className="hover:text-primary transition-colors">Roadmaps</Link></li>
                             <li><Link href="/think" className="hover:text-primary transition-colors">Think</Link></li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="font-semibold mb-4">Community</h3>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Discord</a></li>
-                            <li><a href="#" className="hover:text-primary transition-colors">Contribute</a></li>
+                            <li><Link href="/community" className="hover:text-primary transition-colors">Community</Link></li>
                         </ul>
                     </div>
 
