@@ -27,6 +27,10 @@ export default function SignupPage() {
         setLoading(true);
         setError(null);
 
+        // Determine the redirect URL for email confirmation
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : '');
+        const emailRedirectTo = `${siteUrl}/auth/callback?next=/dashboard`;
+
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
@@ -34,6 +38,7 @@ export default function SignupPage() {
                 data: {
                     full_name: fullName,
                 },
+                emailRedirectTo,
             },
         });
 
