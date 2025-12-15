@@ -56,7 +56,7 @@ const DownloadDropdown: React.FC<DownloadDropdownProps> = ({
         data,
         templateId,
         color || { primary: '#000000', background: '#ffffff' },
-        user.user_id.toString(),
+        user.id,
         resumeId
       );
       console.log('Resume saved successfully:', savedResume);

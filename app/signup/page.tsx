@@ -11,37 +11,44 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 
-export default function LoginPage() {
+export default function SignupPage() {
+    const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState(false);
     const router = useRouter();
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleSignup = async (e: React.FormEvent) => {
         // ... (existing logic)
         e.preventDefault();
         setLoading(true);
         setError(null);
 
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signUp({
             email,
             password,
+            options: {
+                data: {
+                    full_name: fullName,
+                },
+            },
         });
 
         if (error) {
-            if (error.message.includes('Email not confirmed')) {
-                setError('Please verify your email address before signing in. Check your inbox (and spam folder) for the verification link.');
-            } else {
-                setError(error.message);
-            }
+            setError(error.message);
+            setLoading(false);
+        } else if (data.user && !data.session) {
+            setSuccess(true);
             setLoading(false);
         } else {
             router.push('/dashboard');
             router.refresh();
         }
     };
+
     const handleGoogleLogin = async () => {
         setLoading(true);
         setError(null);
@@ -59,6 +66,49 @@ export default function LoginPage() {
         }
     };
 
+    if (success) {
+        return (
+            <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+                {/* Background Image */}
+                <Image
+                    src="/pexels-pixabay-163097.jpg"
+                    alt="Background"
+                    fill
+                    className="object-cover -z-20"
+                    priority
+                />
+                {/* Dark Overlay for readability */}
+                <div className="absolute inset-0 bg-background/30 backdrop-blur-[2px] -z-10" />
+
+                <Card className="w-full max-w-md shadow-2xl border-border/20 bg-card/80 backdrop-blur-md text-center">
+                    <CardHeader>
+                        <div className="mx-auto w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                            </svg>
+                        </div>
+                        <CardTitle className="text-2xl">Check your email</CardTitle>
+                        <CardDescription>
+                            We've sent a verification link to <span className="font-medium text-foreground">{email}</span>.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-sm text-muted-foreground">
+                            Click the link in the email to verify your account and sign in.
+                        </p>
+                    </CardContent>
+                    <CardFooter className="flex justify-center">
+                        <Link href="/login">
+                            <Button variant="outline" className="w-full">
+                                Back to Sign In
+                            </Button>
+                        </Link>
+                    </CardFooter>
+                </Card>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
             {/* Background Image */}
@@ -74,11 +124,22 @@ export default function LoginPage() {
 
             <Card className="w-full max-w-md shadow-2xl border-border/20 bg-card/80 backdrop-blur-md">
                 <CardHeader>
-                    <CardTitle className="text-2xl">Welcome Back</CardTitle>
-                    <CardDescription>Sign in to your account to track your progress</CardDescription>
+                    <CardTitle className="text-2xl">Create Account</CardTitle>
+                    <CardDescription>Join us to master Data Structures and Algorithms</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleLogin} className="space-y-4">
+                    <form onSubmit={handleSignup} className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="fullName">Full Name</Label>
+                            <Input
+                                id="fullName"
+                                type="text"
+                                placeholder="John Doe"
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
+                                required
+                            />
+                        </div>
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -99,6 +160,7 @@ export default function LoginPage() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
+                                    minLength={6}
                                     className="pr-10"
                                 />
                                 <button
@@ -121,7 +183,7 @@ export default function LoginPage() {
                         )}
                         <Button type="submit" className="w-full" disabled={loading}>
                             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                            {loading ? 'Signing in...' : 'Sign In'}
+                            {loading ? 'Creating account...' : 'Sign Up'}
                         </Button>
                     </form>
 
@@ -143,9 +205,9 @@ export default function LoginPage() {
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <p className="text-sm text-muted-foreground">
-                        Don't have an account?{' '}
-                        <Link href="/signup" className="text-primary hover:underline font-medium">
-                            Sign up
+                        Already have an account?{' '}
+                        <Link href="/login" className="text-primary hover:underline font-medium">
+                            Sign in
                         </Link>
                     </p>
                 </CardFooter>

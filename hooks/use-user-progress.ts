@@ -1,12 +1,10 @@
 "use client";
-
 import { useState, useEffect } from "react";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useAuth } from "@/contexts/AuthContext";
 import { getUserProgress, toggleQuestionComplete, UserProgress } from "@/lib/supabase";
 
 export function useUserProgress() {
-    const { user } = useUser();
-    const { getToken } = useAuth();
+    const { user } = useAuth();
     const [progress, setProgress] = useState<UserProgress[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -17,47 +15,36 @@ export function useUserProgress() {
                 return;
             }
 
-            let token;
-            try {
-                token = await getToken({ template: 'supabase' });
-            } catch (err) {
-                console.warn("Failed to get Supabase token", err);
-            }
-
-            const data = await getUserProgress(user.id, token || undefined);
+            // No token needed, Supabase client handles session
+            const data = await getUserProgress(user.id);
             setProgress(data);
             setLoading(false);
         }
 
         loadProgress();
-    }, [user?.id, getToken]);
+    }, [user?.id]);
 
     const toggleComplete = async (
         questionId: string,
         patternSlug: string,
         completed: boolean
     ) => {
-        if (!user?.id) return false;
-
-        let token;
-        try {
-            token = await getToken({ template: 'supabase' });
-        } catch (err) {
-            console.warn("Failed to get Supabase token", err);
+        if (!user?.id) {
+            console.warn("User ID missing in toggleComplete");
+            return false;
         }
 
         const success = await toggleQuestionComplete(
             user.id,
             questionId,
             patternSlug,
-            completed,
-            token || undefined
+            completed
         );
 
         if (success) {
             // Update local state
             // Re-fetching is safer to stay in sync
-            const data = await getUserProgress(user.id, token || undefined);
+            const data = await getUserProgress(user.id);
             setProgress(data);
         }
 

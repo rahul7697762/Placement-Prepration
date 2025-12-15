@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useAuth } from "@/contexts/AuthContext";
 import { fetchPostById, fetchComments, createComment, Post, Comment } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,8 +13,7 @@ import { useParams } from "next/navigation";
 
 export default function PostDetailPage() {
     const { id } = useParams();
-    const { user } = useUser();
-    const { getToken } = useAuth();
+    const { user } = useAuth();
 
     const [post, setPost] = useState<Post | null>(null);
     const [comments, setComments] = useState<Comment[]>([]);
@@ -28,15 +27,9 @@ export default function PostDetailPage() {
 
     const loadData = async () => {
         try {
-            let token;
-            try {
-                token = await getToken({ template: 'supabase' });
-            } catch (err) {
-                console.warn("Failed to get Supabase token", err);
-            }
             const [postData, commentsData] = await Promise.all([
-                fetchPostById(id as string, token || undefined),
-                fetchComments(id as string, token || undefined)
+                fetchPostById(id as string),
+                fetchComments(id as string)
             ]);
 
             setPost(postData);
@@ -53,18 +46,12 @@ export default function PostDetailPage() {
 
         setIsSubmitting(true);
         try {
-            let token;
-            try {
-                token = await getToken({ template: 'supabase' });
-            } catch (err) {
-                console.warn("Failed to get Supabase token", err);
-            }
             const comment = await createComment({
                 post_id: post.id,
                 content: newComment,
                 user_id: user.id,
-                author_name: user.fullName || user.username || "Anonymous"
-            }, token || undefined);
+                author_name: user.user_metadata?.full_name || user.email?.split('@')[0] || "Anonymous"
+            });
 
             if (comment) {
                 setComments([...comments, comment]);

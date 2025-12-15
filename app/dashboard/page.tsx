@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/contexts/AuthContext";
 import { useUserProgress } from "@/hooks/use-user-progress";
 import { initialPatterns } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +12,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export default function DashboardPage() {
-    const { user } = useUser();
+    const { user } = useAuth();
     const { progress, loading, getPatternCompletionCount } = useUserProgress();
 
     if (!user) {
@@ -52,6 +52,8 @@ export default function DashboardPage() {
         };
     });
 
+    const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || "Developer";
+
     return (
         <main className="min-h-screen bg-background relative overflow-hidden">
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] -z-10 pointer-events-none" />
@@ -65,7 +67,7 @@ export default function DashboardPage() {
                     className="space-y-4"
                 >
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-                        Welcome back, {user.firstName || "Developer"}! 👋
+                        Welcome back, {userName}! 👋
                     </h1>
                     <p className="text-xl text-muted-foreground">
                         Track your DSA learning journey and celebrate your progress.

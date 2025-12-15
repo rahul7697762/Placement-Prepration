@@ -1,35 +1,64 @@
-'use client';
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+"use client";
 
-interface User {
-    user_id: string;
-    email: string;
-}
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { User, Session } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
     user: User | null;
-    refreshUser: () => Promise<void>;
+    session: Session | null;
+    loading: boolean;
+    signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    // Mock user for development
-    const [user] = useState<User | null>({ user_id: 'mock-user-123', email: 'user@example.com' });
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+    const [user, setUser] = useState<User | null>(null);
+    const [session, setSession] = useState<Session | null>(null);
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
-    const refreshUser = async () => { console.log('refreshUser called'); };
+    useEffect(() => {
+        const setData = async () => {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (error) console.error("Error getting session:", error);
+
+            setSession(session);
+            setUser(session?.user ?? null);
+            setLoading(false);
+        };
+
+        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+            setSession(session);
+            setUser(session?.user ?? null);
+            setLoading(false);
+        });
+
+        setData();
+
+        return () => {
+            listener.subscription.unsubscribe();
+        };
+    }, []);
+
+    const signOut = async () => {
+        await supabase.auth.signOut();
+        router.push("/login");
+    };
 
     return (
-        <AuthContext.Provider value={{ user, refreshUser }}>
+        <AuthContext.Provider value={{ user, session, loading, signOut }}>
             {children}
         </AuthContext.Provider>
     );
-};
+}
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
-    if (context === undefined) {
-        return { user: { user_id: 'mock-fallback', email: 'mock@fallback.com' }, refreshUser: async () => { } };
+    if (!context) {
+        throw new Error("useAuth must be used within an AuthProvider");
     }
     return context;
 };

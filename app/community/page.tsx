@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useAuth } from "@/contexts/AuthContext";
 import { fetchPosts, createPost, Post } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,10 +11,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { MessageSquare, ThumbsUp, Plus, Search, User } from "lucide-react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/navigation";
 
 export default function CommunityPage() {
-    const { user } = useUser();
-    const { getToken } = useAuth();
+    const { user } = useAuth();
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
@@ -22,6 +22,7 @@ export default function CommunityPage() {
     const [newTitle, setNewTitle] = useState("");
     const [newContent, setNewContent] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         loadPosts();
@@ -30,13 +31,7 @@ export default function CommunityPage() {
     const loadPosts = async () => {
         try {
             setLoading(true);
-            let token;
-            try {
-                token = await getToken({ template: "supabase" });
-            } catch (err) {
-                console.warn("Failed to get Supabase token", err);
-            }
-            const data = await fetchPosts(token || undefined);
+            const data = await fetchPosts();
             if (data) {
                 setPosts(data);
             }
@@ -48,25 +43,23 @@ export default function CommunityPage() {
     };
 
     const handleCreatePost = async () => {
-        if (!user || !newTitle.trim() || !newContent.trim()) return;
+        if (!user) {
+            router.push("/login");
+            return;
+        }
+        if (!newTitle.trim() || !newContent.trim()) return;
 
         try {
             setIsSubmitting(true);
-            let token;
-            try {
-                token = await getToken({ template: "supabase" });
-            } catch (err) {
-                console.warn("Failed to get Supabase token", err);
-            }
 
             const postData = {
                 title: newTitle,
                 content: newContent,
                 user_id: user.id,
-                author_name: user.fullName || user.username || "Anonymous",
+                author_name: user.user_metadata?.full_name || user.email?.split('@')[0] || "Anonymous",
             };
 
-            const newPost = await createPost(postData, token || undefined);
+            const newPost = await createPost(postData);
 
             if (newPost) {
                 setPosts([newPost, ...posts]);

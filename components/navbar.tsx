@@ -6,12 +6,22 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Code2, Github } from "lucide-react";
 import { useState, useEffect } from "react";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { useAuth } from "@/contexts/AuthContext";
 import { ModeToggle } from "@/components/mode-toggle";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function Navbar() {
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
+    const { user, signOut } = useAuth();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -57,7 +67,7 @@ export function Navbar() {
                     >
                         Patterns
                     </Link>
-                    <SignedIn>
+                    {user && (
                         <Link
                             href="/dashboard"
                             className={cn(
@@ -67,7 +77,7 @@ export function Navbar() {
                         >
                             Dashboard
                         </Link>
-                    </SignedIn>
+                    )}
                     <Link
                         href="/roadmap"
                         className={cn(
@@ -120,16 +130,36 @@ export function Navbar() {
                     <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
                         <Github className="h-5 w-5" />
                     </Button>
-                    <SignedOut>
-                        <SignInButton mode="modal">
+
+                    {!user ? (
+                        <Link href="/login">
                             <Button variant="default" size="sm" className="hidden sm:flex">
                                 Sign In
                             </Button>
-                        </SignInButton>
-                    </SignedOut>
-                    <SignedIn>
-                        <UserButton />
-                    </SignedIn>
+                        </Link>
+                    ) : (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                                    <Avatar className="h-8 w-8">
+                                        <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email || ""} />
+                                        <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
+                                    </Avatar>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56" align="end" forceMount>
+                                <DropdownMenuLabel className="font-normal">
+                                    <div className="flex flex-col space-y-1">
+                                        <p className="text-sm font-medium leading-none">{user.email}</p>
+                                    </div>
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => signOut()}>
+                                    Log out
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
                 </div>
             </div>
         </header>

@@ -1,16 +1,23 @@
-import { createClient } from '@supabase/supabase-js'
+import { createBrowserClient } from '@supabase/ssr'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-if (!supabaseUrl) console.error("Missing NEXT_PUBLIC_SUPABASE_URL");
-if (!supabaseAnonKey) console.error("Missing NEXT_PUBLIC_SUPABASE_ANON_KEY");
+// Debug environment variables
+if (!supabaseUrl) {
+    console.error("CRITICAL: Missing NEXT_PUBLIC_SUPABASE_URL environment variable");
+} else if (!supabaseUrl.startsWith('http')) {
+    console.warn(`WARNING: NEXT_PUBLIC_SUPABASE_URL ("${supabaseUrl}") does not start with 'http'. Requests may fail.`);
+}
+
+if (!supabaseAnonKey) {
+    console.error("CRITICAL: Missing NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable");
+}
+
+export const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey)
 
 export const createSupabaseClient = (supabaseToken?: string) => {
-    const options = supabaseToken
-        ? { global: { headers: { Authorization: `Bearer ${supabaseToken}` } } }
-        : {}
-    return createClient(supabaseUrl, supabaseAnonKey, options)
+    return supabase;
 }
 
 // Database types
@@ -26,14 +33,17 @@ export interface UserProgress {
 
 // Helper functions
 export async function getUserProgress(userId: string, token?: string) {
-    const supabase = createSupabaseClient(token)
+    if (!supabaseUrl || !supabaseAnonKey) {
+        console.warn('supabaseUrl or supabaseAnonKey missing in getUserProgress')
+        return []
+    }
     const { data, error } = await supabase
         .from('user_progress')
         .select('*')
         .eq('user_id', userId)
 
     if (error) {
-        console.error('Error fetching user progress:', JSON.stringify(error, null, 2))
+        console.warn('Error fetching user progress:', JSON.stringify(error, null, 2))
         return []
     }
 
@@ -47,7 +57,10 @@ export async function toggleQuestionComplete(
     completed: boolean,
     token?: string
 ) {
-    const supabase = createSupabaseClient(token)
+    if (!supabaseUrl || !supabaseAnonKey) {
+        console.warn('supabaseUrl or supabaseAnonKey missing in toggleQuestionComplete')
+        return false
+    }
 
     // Check if entry exists
     const { data: existing, error: fetchError } = await supabase
@@ -92,7 +105,10 @@ export async function toggleQuestionComplete(
 }
 
 export async function getPatternProgress(userId: string, patternSlug: string, token?: string) {
-    const supabase = createSupabaseClient(token)
+    if (!supabaseUrl || !supabaseAnonKey) {
+        console.warn('supabaseUrl or supabaseAnonKey missing in getPatternProgress')
+        return []
+    }
     const { data, error } = await supabase
         .from('user_progress')
         .select('*')
@@ -130,7 +146,6 @@ export interface Comment {
 
 // Community Helper functions
 export async function fetchPosts(token?: string) {
-    const supabase = createSupabaseClient(token)
     const { data, error } = await supabase
         .from('posts')
         .select('*')
@@ -145,7 +160,6 @@ export async function fetchPosts(token?: string) {
 }
 
 export async function fetchPostById(postId: string, token?: string) {
-    const supabase = createSupabaseClient(token)
     const { data, error } = await supabase
         .from('posts')
         .select('*')
@@ -161,7 +175,6 @@ export async function fetchPostById(postId: string, token?: string) {
 }
 
 export async function createPost(post: Omit<Post, 'id' | 'created_at' | 'likes'>, token?: string) {
-    const supabase = createSupabaseClient(token)
     const { data, error } = await supabase
         .from('posts')
         .insert(post)
@@ -177,7 +190,6 @@ export async function createPost(post: Omit<Post, 'id' | 'created_at' | 'likes'>
 }
 
 export async function fetchComments(postId: string, token?: string) {
-    const supabase = createSupabaseClient(token)
     const { data, error } = await supabase
         .from('comments')
         .select('*')
@@ -193,7 +205,6 @@ export async function fetchComments(postId: string, token?: string) {
 }
 
 export async function createComment(comment: Omit<Comment, 'id' | 'created_at'>, token?: string) {
-    const supabase = createSupabaseClient(token)
     const { data, error } = await supabase
         .from('comments')
         .insert(comment)
