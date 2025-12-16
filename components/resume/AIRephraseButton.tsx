@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 interface AIRephraseButtonProps {
@@ -11,11 +11,39 @@ interface AIRephraseButtonProps {
 const openaiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 const geminiKey = process.env.NEXT_PUBLIC_GOOGLE_AI_API_KEY;
 
+// Request limit configuration
+const MAX_REPHRASE_REQUESTS = 5;
+const STORAGE_KEY = 'ai_rephrase_usage_count';
+
+// Helper functions for localStorage
+const getUsageCount = (): number => {
+  if (typeof window === 'undefined') return 0;
+  const stored = localStorage.getItem(STORAGE_KEY);
+  return stored ? parseInt(stored, 10) : 0;
+};
+
+const setUsageCount = (count: number): void => {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(STORAGE_KEY, count.toString());
+};
+
 const AIRephraseButton: React.FC<AIRephraseButtonProps> = ({ text, section, onApply }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [usageCount, setUsageCountState] = useState(0);
+  const [remainingRequests, setRemainingRequests] = useState(MAX_REPHRASE_REQUESTS);
+
+  // Load usage count on mount
+  useEffect(() => {
+    const count = getUsageCount();
+    setUsageCountState(count);
+    setRemainingRequests(Math.max(0, MAX_REPHRASE_REQUESTS - count));
+  }, []);
+
+  // Check if user has reached the limit
+  const hasReachedLimit = remainingRequests <= 0;
 
   // Call OpenAI
   const callOpenAI = async (prompt: string): Promise<string> => {
@@ -55,6 +83,12 @@ const AIRephraseButton: React.FC<AIRephraseButtonProps> = ({ text, section, onAp
   };
 
   const generateSuggestions = async () => {
+    // Check limit first
+    if (hasReachedLimit) {
+      setError('You have used all 5 AI Rephrase requests. Limit reached.');
+      return;
+    }
+
     if (!text || text.trim().length < 10) {
       setError('Please enter at least 10 characters to get AI suggestions');
       return;
@@ -64,11 +98,31 @@ const AIRephraseButton: React.FC<AIRephraseButtonProps> = ({ text, section, onAp
     setError(null);
     setSuggestions([]);
 
-    const prompt = `You are a professional resume writer. Rephrase the following ${section} section text to make it more professional, impactful, and ATS-friendly. Provide 3 different variations. Keep the same meaning but improve clarity, use action verbs, and quantify achievements where possible.
+    const prompt = `
+You are a senior resume optimization expert specializing in ATS (Applicant Tracking Systems).
 
-Original text: "${text}"
+Objective:
+Rewrite the following **${section}** section to maximize ATS compatibility and recruiter impact.
 
-Provide 3 rephrased versions, each on a new line, numbered 1-3.`;
+ATS Optimization Rules:
+- Use standard resume terminology commonly recognized by ATS
+- Prioritize role-specific keywords and skills (without keyword stuffing)
+- Start bullet points with strong action verbs
+- Use clear, simple sentence structures
+- Quantify results where logically possible (do not fabricate data)
+- Avoid graphics, symbols, emojis, or complex formatting
+- Use consistent tense (past for previous roles, present for current roles)
+
+Original Text:
+"${text}"
+
+Output Instructions:
+- Provide **3 distinct ATS-optimized variations**
+- Each version must be concise, professional, and keyword-rich
+- Output as plain text
+- Number each version clearly (1–3)
+`;
+
 
     try {
       let generatedText = '';
@@ -117,6 +171,12 @@ Provide 3 rephrased versions, each on a new line, numbered 1-3.`;
         setSuggestions(parsedSuggestions.slice(0, 3));
       }
 
+      // Increment usage count after successful generation
+      const newCount = usageCount + 1;
+      setUsageCount(newCount);
+      setUsageCountState(newCount);
+      setRemainingRequests(Math.max(0, MAX_REPHRASE_REQUESTS - newCount));
+
       setShowSuggestions(true);
     } catch (err) {
       console.error('AI Rephrase Error:', err);
@@ -138,8 +198,12 @@ Provide 3 rephrased versions, each on a new line, numbered 1-3.`;
       <button
         type="button"
         onClick={generateSuggestions}
-        disabled={isLoading || !text}
-        className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        disabled={isLoading || !text || hasReachedLimit}
+        className={`flex items-center gap-2 px-3 py-1 text-sm rounded transition-colors ${hasReachedLimit
+          ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+          : 'bg-purple-600 text-white hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed'
+          }`}
+        title={hasReachedLimit ? 'AI Rephrase limit reached (5/5 used)' : `${remainingRequests} requests remaining`}
       >
         {isLoading ? (
           <>
@@ -150,20 +214,32 @@ Provide 3 rephrased versions, each on a new line, numbered 1-3.`;
           <>
             <span>✨</span>
             <span>AI Rephrase</span>
+            <span className={`text-xs px-1.5 py-0.5 rounded-full ${hasReachedLimit
+              ? 'bg-red-500/30 text-red-200'
+              : 'bg-white/20'
+              }`}>
+              {remainingRequests}/{MAX_REPHRASE_REQUESTS}
+            </span>
           </>
         )}
       </button>
 
       {error && (
-        <div className="absolute z-10 mt-2 p-3 bg-red-50 border border-red-200 rounded-lg shadow-lg text-sm text-red-600 w-80">
+        <div className="absolute z-10 mt-2 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg shadow-lg text-sm text-red-600 dark:text-red-400 w-80">
           {error}
         </div>
       )}
 
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-10 mt-2 p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="font-semibold text-gray-900 dark:text-white">AI Suggestions</h4>
+        <div className="absolute z-10 mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-lg shadow-xl w-96 max-h-96 flex flex-col">
+          {/* Fixed Header */}
+          <div className="flex items-center justify-between p-4 pb-3 border-b border-gray-200 dark:border-slate-600 flex-shrink-0">
+            <div>
+              <h4 className="font-semibold text-gray-900 dark:text-white">AI Suggestions</h4>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {remainingRequests} request{remainingRequests !== 1 ? 's' : ''} remaining
+              </p>
+            </div>
             <button
               onClick={() => setShowSuggestions(false)}
               className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -172,23 +248,26 @@ Provide 3 rephrased versions, each on a new line, numbered 1-3.`;
             </button>
           </div>
 
-          <div className="space-y-3">
-            {suggestions.map((suggestion, index) => (
-              <div
-                key={index}
-                className="p-3 bg-purple-50 dark:bg-slate-700 rounded-lg border border-purple-200 dark:border-slate-600"
-              >
-                <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
-                  {suggestion}
-                </p>
-                <button
-                  onClick={() => handleApply(suggestion)}
-                  className="text-xs px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+          {/* Scrollable Content */}
+          <div className="overflow-y-auto flex-1">
+            <div className="space-y-3 p-4 pt-3 pr-5">
+              {suggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  className="p-3 bg-purple-50 dark:bg-slate-700 rounded-lg border border-purple-200 dark:border-slate-600"
                 >
-                  Use This
-                </button>
-              </div>
-            ))}
+                  <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                    {suggestion}
+                  </p>
+                  <button
+                    onClick={() => handleApply(suggestion)}
+                    className="text-xs px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
+                  >
+                    Use This
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -197,3 +276,4 @@ Provide 3 rephrased versions, each on a new line, numbered 1-3.`;
 };
 
 export default AIRephraseButton;
+
