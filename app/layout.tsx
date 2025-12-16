@@ -12,6 +12,29 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "DSA Pattern Share",
   description: "Master Data Structures and Algorithms pattern-wise",
+  metadataBase: new URL("https://dsa-pattern-share.vercel.app"), // Update this with your actual production URL
+  openGraph: {
+    title: "DSA Pattern Share",
+    description: "Master Data Structures and Algorithms pattern-wise. Your ultimate platform for learning DSA through categorized patterns and problems.",
+    url: "https://dsa-pattern-share.vercel.app", // Update this with your actual production URL
+    siteName: "DSA Pattern Share",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "DSA Pattern Share - Master Data Structures and Algorithms",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DSA Pattern Share",
+    description: "Master Data Structures and Algorithms pattern-wise. Your ultimate platform for learning DSA through categorized patterns and problems.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
