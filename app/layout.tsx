@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -14,11 +15,11 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "DSA Pattern Share",
   description: "Master Data Structures and Algorithms pattern-wise",
-  metadataBase: new URL("https://dsa-pattern-share.vercel.app"), // Update this with your actual production URL
+  metadataBase: new URL("https://placement-prepration-woad.vercel.app"), // Update this with your actual production URL
   openGraph: {
     title: "DSA Pattern Share",
     description: "Master Data Structures and Algorithms pattern-wise. Your ultimate platform for learning DSA through categorized patterns and problems.",
-    url: "https://dsa-pattern-share.vercel.app", // Update this with your actual production URL
+    url: "https://placement-prepration-woad.vercel.app", // Update this with your actual production URL
     siteName: "DSA Pattern Share",
     images: [
       {
@@ -63,6 +64,7 @@ export default function RootLayout({
           </ThemeProvider>
         </AuthProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
