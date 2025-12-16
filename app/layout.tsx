@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 import { Footer } from "@/components/footer";
+import { FeedbackButton } from "@/components/FeedbackModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -56,6 +57,7 @@ export default function RootLayout({
             <div className="flex-1">
               {children}
             </div>
+            <FeedbackButton />
             <Footer />
           </ThemeProvider>
         </AuthProvider>

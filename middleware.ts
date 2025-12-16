@@ -61,7 +61,7 @@ export async function middleware(request: NextRequest) {
     console.log(`Middleware: Path: ${request.nextUrl.pathname}, User found: ${!!user}`);
 
     // Define paths that are accessible without authentication
-    const publicPaths = ["/", "/compiler", "/login", "/signup", "/auth/callback", "/auth/auth-code-error"];
+    const publicPaths = ["/", "/compiler", "/login", "/signup", "/auth/callback", "/auth/auth-code-error", "/feedback"];
 
     // Check if the current path is public
     const isPublicPath = publicPaths.some(path =>
