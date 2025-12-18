@@ -183,7 +183,7 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
             };
 
             setData(mergedData);
-            // alert('Resume imported successfully!');
+            alert('Resume imported successfully!');
         } catch (error: any) {
             console.error(error);
             alert(error.message || 'Error importing resume. Please ensure it is a readable PDF.');
@@ -248,12 +248,16 @@ const ResumeBuilder: React.FC<ResumeBuilderProps> = ({
                             onChange={handleFileUpload}
                         />
                         <button
-                            disabled={true}
-                            className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-slate-700 text-gray-400 dark:text-gray-500 rounded-lg cursor-not-allowed text-sm font-medium"
-                            title="Feature temporarily disabled for maintenance"
+                            onClick={() => {
+                                console.log("Import Resume button clicked");
+                                uploadRef.current?.click();
+                            }}
+                            disabled={isImporting}
+                            className={`flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-600 rounded-lg transition-colors text-sm font-medium shadow-sm ${isImporting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            title="Import details from PDF resume"
                         >
-                            <Upload size={18} />
-                            import resume under Maintenance
+                            <Upload size={18} className={isImporting ? 'animate-spin' : ''} />
+                            {isImporting ? 'Importing...' : 'Import Resume'}
                         </button>
                     </div>
                 </div>

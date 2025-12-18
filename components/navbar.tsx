@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Code2, Github } from "lucide-react";
+import { Code2, Github, Mic } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -24,8 +24,16 @@ export function Navbar() {
     const { user, signOut } = useAuth();
 
     useEffect(() => {
+        let ticking = false;
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 0);
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const shouldBeScrolled = window.scrollY > 0;
+                    setIsScrolled(shouldBeScrolled);
+                    ticking = false;
+                });
+                ticking = true;
+            }
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
@@ -67,6 +75,28 @@ export function Navbar() {
                     >
                         Patterns
                     </Link>
+                    <Link
+                        href="/resume-builder"
+                        className={cn(
+                            "transition-colors hover:text-primary",
+                            pathname === "/resume-builder" ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
+                        Resume
+                    </Link>
+                    <Link
+                        href="/interview"
+                        className={cn(
+                            "transition-colors hover:text-primary flex items-center gap-1.5",
+                            pathname.startsWith("/interview") ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
+                        <Mic className="w-3.5 h-3.5" />
+                        Interview
+                        <span className="text-[10px] px-1.5 py-0.5 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full font-semibold">
+                            NEW
+                        </span>
+                    </Link>
                     {user && (
                         <Link
                             href="/dashboard"
@@ -105,15 +135,7 @@ export function Navbar() {
                     >
                         Compiler
                     </Link>
-                    <Link
-                        href="/resume-builder"
-                        className={cn(
-                            "transition-colors hover:text-primary",
-                            pathname === "/resume-builder" ? "text-primary" : "text-muted-foreground"
-                        )}
-                    >
-                        Resume
-                    </Link>
+
                     <Link
                         href="/community"
                         className={cn(

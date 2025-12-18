@@ -9,6 +9,7 @@ import {
   Layers,
   Layout,
   Map,
+  Mic,
   Terminal,
   Users
 } from "lucide-react";
@@ -68,6 +69,13 @@ export default function Home() {
               <FileText className="w-4 h-4 text-primary" />
               <span>Resume Builder</span>
             </div>
+            <div className="flex items-center gap-2 bg-gradient-to-r from-primary/20 to-purple-500/20 px-4 py-2 rounded-lg border border-primary/30 relative">
+              <Mic className="w-4 h-4 text-primary" />
+              <span className="font-medium text-foreground">AI Interview</span>
+              <span className="text-[10px] px-1.5 py-0.5 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full font-semibold">
+                NEW
+              </span>
+            </div>
             <div className="flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-lg border border-border/50">
               <Terminal className="w-4 h-4 text-primary" />
               <span>Online Compiler</span>
@@ -121,12 +129,13 @@ export default function Home() {
                 bg: "bg-orange-500/10"
               },
               {
-                icon: Layers,
-                title: "System Design (Coming Soon)",
-                description: "Master high-level architecture and system design concepts required for senior roles.",
-                link: "#",
-                color: "text-pink-500",
-                bg: "bg-pink-500/10"
+                icon: Mic,
+                title: "AI Mock Interview",
+                description: "Practice with our AI interviewer. Get real-time feedback on technical skills, communication, and body language.",
+                link: "/interview",
+                color: "text-violet-500",
+                bg: "bg-gradient-to-br from-violet-500/20 to-purple-500/20",
+                isNew: true
               },
               {
                 icon: Users,
@@ -143,8 +152,16 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="group relative bg-background p-8 rounded-3xl border hover:border-primary/50 transition-all hover:shadow-lg hover:-translate-y-1"
+                className={`group relative bg-background p-8 rounded-3xl border transition-all hover:shadow-lg hover:-translate-y-1 ${'isNew' in feature && feature.isNew
+                    ? "border-violet-500/50 hover:border-violet-500 ring-1 ring-violet-500/20"
+                    : "hover:border-primary/50"
+                  }`}
               >
+                {'isNew' in feature && feature.isNew && (
+                  <div className="absolute -top-3 right-6 px-3 py-1 bg-gradient-to-r from-violet-600 to-purple-600 text-white text-xs font-bold rounded-full shadow-lg">
+                    ✨ NEW
+                  </div>
+                )}
                 <Link href={feature.link} className="absolute inset-0 z-10">
                   <span className="sr-only">Go to {feature.title}</span>
                 </Link>
