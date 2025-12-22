@@ -191,3 +191,69 @@ export const initialPatterns: Pattern[] = [
         ]
     }
 ];
+
+import { additionalQuestionsForExistingPatterns, newPatterns } from "./dsa-patterns-extended";
+
+// Merge additional questions into existing patterns
+const mergedInitialPatterns: Pattern[] = initialPatterns.map(pattern => {
+    const additionalQuestions = additionalQuestionsForExistingPatterns[pattern.slug] || [];
+    return {
+        ...pattern,
+        questions: [...pattern.questions, ...additionalQuestions]
+    };
+});
+
+// Define the logical learning order by slug
+const learningOrder: string[] = [
+    // Phase 1 – Foundations
+    "arrays",
+    "strings",
+    "prefix-sum",
+    "hash-table",
+    "two-pointers",
+    "sliding-window",
+    // Phase 2 – Searching & Optimization
+    "binary-search",
+    "modified-binary-search",
+    "overlapping-intervals",
+    "greedy",
+    // Phase 3 – Stack & Pointer Techniques
+    "stack",
+    "monotonic-stack",
+    "fast-slow-pointers",
+    // Phase 4 – Linked Lists
+    "linked-list",
+    "linked-list-reversal",
+    // Phase 5 – Trees
+    "tree",
+    "binary-tree-traversal",
+    // Phase 6 – Graphs & Traversal
+    "matrix-traversal",
+    "dfs",
+    "bfs",
+    "graph",
+    // Phase 7 – Backtracking
+    "backtracking",
+    // Phase 8 – Heaps
+    "heap",
+    "top-k-elements",
+    // Phase 9 – Dynamic Programming
+    "dynamic-programming",
+    // Phase 10 – Advanced Design
+    "design",
+    // Maths (additional)
+    "maths",
+];
+
+// Combine all patterns
+const allPatternsUnordered: Pattern[] = [...mergedInitialPatterns, ...newPatterns];
+
+// Sort patterns according to learning order
+export const allPatterns: Pattern[] = allPatternsUnordered.sort((a, b) => {
+    const indexA = learningOrder.indexOf(a.slug);
+    const indexB = learningOrder.indexOf(b.slug);
+    // If not in learningOrder, put at the end
+    const orderA = indexA === -1 ? learningOrder.length : indexA;
+    const orderB = indexB === -1 ? learningOrder.length : indexB;
+    return orderA - orderB;
+});

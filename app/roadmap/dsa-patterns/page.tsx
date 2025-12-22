@@ -12,15 +12,15 @@ import {
 } from "@/components/ui/accordion";
 import { PlayCircle, Clock, FileCode, Users, Trophy, CheckCircle2, Circle, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { initialPatterns, Pattern } from "@/lib/data";
+import { allPatterns, Pattern } from "@/lib/data";
 import { useUserProgress } from "@/hooks/use-user-progress";
 
 export default function DsaPatternsPage() {
     const { isQuestionComplete, toggleComplete, progress } = useUserProgress();
 
     // Calculate total progress based on user's actual progress
-    const totalPatterns = initialPatterns.length;
-    const totalQuestions = initialPatterns.reduce((acc, pattern) => acc + pattern.questions.length, 0);
+    const totalPatterns = allPatterns.length;
+    const totalQuestions = allPatterns.reduce((acc, pattern) => acc + pattern.questions.length, 0);
     const completedQuestions = progress.filter(p => p.completed).length;
     const progressPercentage = totalQuestions > 0 ? Math.round((completedQuestions / totalQuestions) * 100) : 0;
 
@@ -37,7 +37,7 @@ export default function DsaPatternsPage() {
                             </div>
                             <h1 className="text-3xl md:text-4xl font-bold">DSA Pattern Cheatsheet 2025</h1>
                             <p className="text-muted-foreground text-lg max-w-2xl">
-                                Master individual coding patterns to solve algorithmic problems efficiently. This cheatsheet covers 15 essential patterns with curated LeetCode problems.
+                                Master individual coding patterns to solve algorithmic problems efficiently. This comprehensive cheatsheet covers 27 essential patterns with 300+ curated LeetCode problems.
                             </p>
 
                             <div className="flex flex-wrap gap-4 md:gap-8 text-sm text-muted-foreground pt-2">
@@ -80,13 +80,13 @@ export default function DsaPatternsPage() {
                 <h2 className="text-2xl font-bold mb-6">Patterns & Problems</h2>
                 <div className="space-y-4">
                     <Accordion type="single" collapsible className="w-full space-y-4">
-                        {initialPatterns.map((pattern: Pattern) => (
+                        {allPatterns.map((pattern: Pattern) => (
                             <AccordionItem key={pattern.id} value={pattern.id} className="border rounded-lg bg-card px-4">
                                 <AccordionTrigger className="hover:no-underline py-4">
                                     <div className="flex items-center gap-4 text-left w-full">
-                                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-sm font-medium shrink-0">
+                                        {/* <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-sm font-medium shrink-0">
                                             {pattern.id}
-                                        </div>
+                                        </div> */}
                                         <div className="flex-1 min-w-0">
                                             <h3 className="font-semibold text-base truncate">{pattern.title}</h3>
                                             <p className="text-sm text-muted-foreground font-normal mt-1 block line-clamp-2 md:line-clamp-1">{pattern.description}</p>
@@ -131,8 +131,8 @@ export default function DsaPatternsPage() {
                                                             </div>
                                                             <div className="col-span-4 md:col-span-3 text-right">
                                                                 <span className={`text-xs font-medium px-2 py-1 rounded-full border ${problem.difficulty === 'Easy' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
-                                                                        problem.difficulty === 'Medium' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' :
-                                                                            'bg-red-500/10 text-red-500 border-red-500/20'
+                                                                    problem.difficulty === 'Medium' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' :
+                                                                        'bg-red-500/10 text-red-500 border-red-500/20'
                                                                     }`}>
                                                                     {problem.difficulty}
                                                                 </span>
