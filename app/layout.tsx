@@ -13,20 +13,51 @@ import { FeedbackButton } from "@/components/FeedbackModal";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DSA Pattern Share",
-  description: "Master Data Structures and Algorithms pattern-wise",
-  metadataBase: new URL("https://placement-prepration-woad.vercel.app"), // Update this with your actual production URL
+  title: {
+    default: "prep4place - Complete Placement Preparation Platform",
+    template: "%s | prep4place"
+  },
+  description: "Master your placement preparation with prep4place - Your complete platform for DSA patterns, system design, resume builder, interview prep, and LeetCode integration. Get placement-ready with curated resources and AI-powered tools.",
+  keywords: [
+    "placement preparation",
+    "DSA patterns",
+    "data structures and algorithms",
+    "system design",
+    "interview preparation",
+    "leetcode",
+    "resume builder",
+    "coding interview",
+    "technical interview",
+    "job interview prep",
+    "computer science",
+    "software engineering",
+    "FAANG preparation",
+    "placement ready",
+    "coding practice"
+  ],
+  authors: [{ name: "prep4place Team" }],
+  creator: "prep4place",
+  publisher: "prep4place",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL("https://placement-prepration-woad.vercel.app"),
+  alternates: {
+    canonical: "https://placement-prepration-woad.vercel.app",
+  },
   openGraph: {
-    title: "DSA Pattern Share",
-    description: "Master Data Structures and Algorithms pattern-wise. Your ultimate platform for learning DSA through categorized patterns and problems.",
-    url: "https://placement-prepration-woad.vercel.app", // Update this with your actual production URL
-    siteName: "DSA Pattern Share",
+    title: "prep4place - Complete Placement Preparation Platform",
+    description: "Master DSA patterns, system design, resume building, and ace your interviews with AI-powered tools. LeetCode integration, 300+ curated problems, and comprehensive roadmaps.",
+    url: "https://placement-prepration-woad.vercel.app",
+    siteName: "prep4place",
     images: [
       {
-        url: "/og-image.png",
+        url: "/logo-bauhaus.png",
         width: 1200,
         height: 630,
-        alt: "DSA Pattern Share - Master Data Structures and Algorithms",
+        alt: "prep4place - Your Complete Placement Preparation Platform",
       },
     ],
     locale: "en_US",
@@ -34,10 +65,34 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "DSA Pattern Share",
-    description: "Master Data Structures and Algorithms pattern-wise. Your ultimate platform for learning DSA through categorized patterns and problems.",
-    images: ["/og-image.png"],
+    title: "prep4place - Complete Placement Preparation Platform",
+    description: "Master DSA patterns, system design, and ace your interviews with AI-powered tools. 300+ curated problems, LeetCode integration, and comprehensive roadmaps.",
+    images: ["/logo-bauhaus.png"],
+    creator: "@prep4place",
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: "/logo-bauhaus.png",
+    shortcut: "/logo-bauhaus.png",
+    apple: "/logo-bauhaus.png",
+  },
+  manifest: "/manifest.json",
+  verification: {
+    google: "your-google-verification-code", // Add your Google Search Console verification
+    // yandex: "your-yandex-verification",
+    // bing: "your-bing-verification",
+  },
+  category: "education",
 };
 
 export default function RootLayout({

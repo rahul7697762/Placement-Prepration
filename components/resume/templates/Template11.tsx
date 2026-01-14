@@ -22,6 +22,7 @@ const DraggableSection = ({ id, children, color, onDelete }: { id: string, child
         >
             <div
                 className="absolute -top-7 left-0 flex flex-row items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity print:hidden z-50 pointer-events-none"
+                data-html2canvas-ignore="true"
             >
                 <div className="flex items-center bg-white border border-gray-200 shadow-sm rounded-md px-1 py-0.5 pointer-events-auto">
                     <div
@@ -115,11 +116,36 @@ const Template11: React.FC<TemplateProps> = ({ data, color, onUpdate }) => {
                                 {exp.position}
                             </div>
                             {exp.description && (
-                                <ul className="list-disc list-inside text-sm text-gray-800 space-y-1">
-                                    {exp.description.split('.').filter(s => s.trim()).map((sentence, idx) => (
-                                        <li key={idx}>{sentence.trim()}.</li>
-                                    ))}
-                                </ul>
+                                <div className="text-sm text-gray-800">
+                                    {(() => {
+                                        // Check if description has newlines or bullet points
+                                        const hasNewlines = exp.description.includes('\n');
+                                        const hasBullets = exp.description.includes('•') || exp.description.match(/^[\s]*[-*]\s/m);
+
+                                        if (hasNewlines || hasBullets) {
+                                            // Split by newlines and render as list
+                                            return (
+                                                <ul className="list-disc list-inside space-y-1">
+                                                    {exp.description.split('\n').filter(s => s.trim()).map((line, idx) => (
+                                                        <li key={idx}>{line.trim().replace(/^[•\-*]\s*/, '')}</li>
+                                                    ))}
+                                                </ul>
+                                            );
+                                        } else if (exp.description.includes('.')) {
+                                            // Split by periods
+                                            return (
+                                                <ul className="list-disc list-inside space-y-1">
+                                                    {exp.description.split('.').filter(s => s.trim()).map((sentence, idx) => (
+                                                        <li key={idx}>{sentence.trim()}.</li>
+                                                    ))}
+                                                </ul>
+                                            );
+                                        } else {
+                                            // Plain text - just display as is
+                                            return <p className="whitespace-pre-wrap">{exp.description}</p>;
+                                        }
+                                    })()}
+                                </div>
                             )}
                         </div>
                     ))}
@@ -149,13 +175,43 @@ const Template11: React.FC<TemplateProps> = ({ data, color, onUpdate }) => {
                                         </a>
                                     )}
                                 </div>
+                                {(proj.startDate || proj.endDate) && (
+                                    <span className="text-sm italic text-gray-700">
+                                        {proj.startDate && proj.endDate ? `${proj.startDate} - ${proj.endDate}` : proj.startDate || proj.endDate}
+                                    </span>
+                                )}
                             </div>
                             {proj.description && (
-                                <ul className="list-disc list-inside text-sm text-gray-800 space-y-1">
-                                    {proj.description.split('.').filter(s => s.trim()).map((sentence, idx) => (
-                                        <li key={idx}>{sentence.trim()}.</li>
-                                    ))}
-                                </ul>
+                                <div className="text-sm text-gray-800">
+                                    {(() => {
+                                        // Check if description has newlines or bullet points
+                                        const hasNewlines = proj.description.includes('\n');
+                                        const hasBullets = proj.description.includes('•') || proj.description.match(/^[\s]*[-*]\s/m);
+
+                                        if (hasNewlines || hasBullets) {
+                                            // Split by newlines and render as list
+                                            return (
+                                                <ul className="list-disc list-inside space-y-1">
+                                                    {proj.description.split('\n').filter(s => s.trim()).map((line, idx) => (
+                                                        <li key={idx}>{line.trim().replace(/^[•\-*]\s*/, '')}</li>
+                                                    ))}
+                                                </ul>
+                                            );
+                                        } else if (proj.description.includes('.')) {
+                                            // Split by periods
+                                            return (
+                                                <ul className="list-disc list-inside space-y-1">
+                                                    {proj.description.split('.').filter(s => s.trim()).map((sentence, idx) => (
+                                                        <li key={idx}>{sentence.trim()}.</li>
+                                                    ))}
+                                                </ul>
+                                            );
+                                        } else {
+                                            // Plain text - just display as is
+                                            return <p className="whitespace-pre-wrap">{proj.description}</p>;
+                                        }
+                                    })()}
+                                </div>
                             )}
                         </div>
                     ))}
@@ -176,7 +232,11 @@ const Template11: React.FC<TemplateProps> = ({ data, color, onUpdate }) => {
                         <li key={i}>
                             <span className="font-medium text-gray-900">{cert.course}</span>
                             {cert.institution && <span> | {cert.institution}</span>}
-                            {cert.year && <span className="float-right italic text-sm">{cert.year}</span>}
+                            {(cert.startDate || cert.endDate || cert.year) && (
+                                <span className="float-right italic text-sm">
+                                    {cert.startDate && cert.endDate ? `${cert.startDate} - ${cert.endDate}` : cert.startDate || cert.endDate || cert.year}
+                                </span>
+                            )}
                         </li>
                     ))}
                 </ul>
@@ -292,15 +352,20 @@ const Template11: React.FC<TemplateProps> = ({ data, color, onUpdate }) => {
                 </h2>
                 <div className="space-y-2">
                     {education?.map((edu, i) => (
-                        <div key={i} className="flex justify-between items-start text-sm">
-                            <div>
-                                <h3 className="font-bold text-base" style={{ color: color.primary }}>{edu.institution}</h3>
-                                <p className="italic text-gray-800">{edu.course}</p>
+                        <div key={i} className="text-sm">
+                            <div className="flex justify-between items-start mb-1">
+                                <div className="flex-1">
+                                    <h3 className="font-bold text-base" style={{ color: color.primary }}>{edu.institution}</h3>
+                                    <p className="italic text-gray-800">{edu.course}</p>
+                                </div>
+                                <div className="text-right ml-4">
+                                    {edu.year && <p className="italic font-medium">{edu.year}</p>}
+                                    {edu.percentage && <p className="text-xs">GPA: {edu.percentage}</p>}
+                                </div>
                             </div>
-                            <div className="text-right">
-                                <p className="italic">{edu.year}</p>
-                                {edu.percentage && <p className="font-semibold">GPA/Percentage: {edu.percentage}</p>}
-                            </div>
+                            {edu.description && (
+                                <p className="text-xs text-gray-700 mt-1">{edu.description}</p>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -351,7 +416,7 @@ const Template11: React.FC<TemplateProps> = ({ data, color, onUpdate }) => {
     };
 
     return (
-        <div className="w-[850px] mx-auto bg-white text-gray-900 font-serif p-8 leading-relaxed relative pb-20">
+        <div className="w-[850px] mx-auto bg-white text-gray-900 p-4 leading-relaxed relative pb-12" style={{ fontFamily: "'Times New Roman', Times, serif" }}>
             {/* HEADER - Fixed */}
             <header className="mb-6">
                 <h1
@@ -443,9 +508,12 @@ const Template11: React.FC<TemplateProps> = ({ data, color, onUpdate }) => {
                 })}
             </Reorder.Group>
 
-            {/* Add Section Button - Print Hidden */}
+            {/* Add Section Button - Hidden from PDF capture */}
             {availableSections.length > 0 && (
-                <div className="mt-8 border-t border-dashed border-gray-300 pt-4 print:hidden">
+                <div
+                    className="mt-8 border-t border-dashed border-gray-300 pt-4"
+                    data-html2canvas-ignore="true"
+                >
                     <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wider">Add Sections</h3>
                     <div className="flex flex-wrap gap-2">
                         {availableSections.map((sectionId) => (

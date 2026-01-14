@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Code2, Github, Twitter, Linkedin } from "lucide-react";
+import Image from "next/image";
+import { Github, Twitter, Linkedin } from "lucide-react";
 
 export function Footer() {
     return (
@@ -7,11 +8,14 @@ export function Footer() {
             <div className="container mx-auto px-8 md:px-12 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
                     <div className="space-y-4 md:col-span-2">
-                        <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-                            <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
-                                <Code2 className="h-5 w-5" />
-                            </div>
-                            <span>DSA Share</span>
+                        <Link href="/" className="flex items-center">
+                            <Image
+                                src="/logo-bauhaus.png"
+                                alt="prep4place"
+                                width={120}
+                                height={32}
+                                className="h-8 w-auto object-contain"
+                            />
                         </Link>
                         <p className="text-sm text-muted-foreground max-w-sm">
                             The complete platform for technical interview preparation. Master patterns, build superior resumes, and practice coding all in one place.
@@ -54,7 +58,7 @@ export function Footer() {
                 </div>
 
                 <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
-                    <p>&copy; {new Date().getFullYear()} DSA Share. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} prep4place. All rights reserved.</p>
                 </div>
             </div>
         </footer>

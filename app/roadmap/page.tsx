@@ -21,17 +21,6 @@ interface RoadmapPhase {
 
 const roadmapData: RoadmapPhase[] = [
     {
-        title: "Practice Python",
-        description: "Solve Python coding problems online. 192 Problems, Beginner Level.",
-        topics: [
-            { name: "Basics & Math" },
-            { name: "Data Structures" },
-            { name: "Algorithms" },
-        ],
-        link: "/roadmap/python",
-        isTrack: true,
-    },
-    {
         title: "DSA Pattern Cheatsheet 2025",
         description: "Master 15 essential coding patterns with curated LeetCode problems.",
         topics: [

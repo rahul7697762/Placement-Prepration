@@ -216,8 +216,8 @@ const Form: React.FC<FormProps> = ({
                           clearAutoFill?.(`contact.${field}`);
                         }}
                         className={`w-full px-4 py-2 rounded-lg border ${autoFilledFields?.[`contact.${field}`]
-                            ? "border-indigo-300 ring-2 ring-indigo-500/20"
-                            : "border-gray-200 dark:border-slate-700"
+                          ? "border-indigo-300 ring-2 ring-indigo-500/20"
+                          : "border-gray-200 dark:border-slate-700"
                           } bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all`}
                         placeholder={`Enter your ${field}`}
                       />
@@ -283,7 +283,7 @@ const Form: React.FC<FormProps> = ({
             <SectionEditor
               title="Projects"
               section="projects"
-              fields={["title", "link", "description"]}
+              fields={["title", "link", "startDate", "endDate", "description"]}
               data={safeData}
               addRow={addRow}
               removeRow={removeRow}
@@ -341,7 +341,7 @@ const Form: React.FC<FormProps> = ({
             <SectionEditor
               title="Certifications"
               section="certifications"
-              fields={["course", "institution", "year", "description"]}
+              fields={["course", "institution", "startDate", "endDate", "description"]}
               data={safeData}
               addRow={addRow}
               removeRow={removeRow}
@@ -465,8 +465,8 @@ const SimpleTextArea = ({
         <textarea
           rows={3}
           className={`w-full px-4 py-3 rounded-lg border ${isAutoFilled
-              ? "border-indigo-300 ring-2 ring-indigo-500/20"
-              : "border-gray-200 dark:border-slate-700"
+            ? "border-indigo-300 ring-2 ring-indigo-500/20"
+            : "border-gray-200 dark:border-slate-700"
             } bg-white dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all resize-none`}
           value={value}
           onChange={(e) => onChange(e.target.value)}

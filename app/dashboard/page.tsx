@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserProgress } from "@/hooks/use-user-progress";
+import { useCodingProfile } from "@/hooks/use-coding-profile";
 import { initialPatterns } from "@/lib/data";
 import {
     Card,
@@ -16,13 +17,14 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { Trophy, Target, CheckCircle, TrendingUp, Award, Activity, DollarSign, Users, CreditCard, Download, Calendar } from "lucide-react";
+import { Trophy, Target, CheckCircle, TrendingUp, Award, Activity, DollarSign, Users, CreditCard, Download, Calendar, Github, Code2, Link2, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function DashboardPage() {
     const { user: authUser } = useAuth();
     const { progress, loading, getPatternCompletionCount } = useUserProgress();
+    const { profile, leetcodeUsername, githubUsername, hasLeetCodeLinked, hasGitHubLinked } = useCodingProfile();
 
     const user = authUser;
 
@@ -281,6 +283,120 @@ export default function DashboardPage() {
                             </CardContent>
                         </Card>
                     </div>
+
+                    {/* Coding Profile Section */}
+                    <Card>
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <div>
+                                <CardTitle className="flex items-center gap-2">
+                                    <Link2 className="h-5 w-5" />
+                                    Coding Profiles
+                                </CardTitle>
+                                <CardDescription>
+                                    Linked accounts for automatic verification
+                                </CardDescription>
+                            </div>
+                            <Button variant="outline" asChild>
+                                <Link href="/profile">
+                                    Manage Profiles
+                                </Link>
+                            </Button>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="grid gap-4 md:grid-cols-2">
+                                {/* LeetCode Card */}
+                                <div className="flex items-center justify-between p-4 border rounded-lg bg-card/50">
+                                    <div className="flex items-center gap-4">
+                                        <div className="h-10 w-10 rounded-full bg-orange-500/10 flex items-center justify-center">
+                                            <Code2 className="h-5 w-5 text-orange-500" />
+                                        </div>
+                                        <div>
+                                            <p className="font-medium">LeetCode</p>
+                                            {hasLeetCodeLinked ? (
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <a
+                                                        href={`https://leetcode.com/${leetcodeUsername}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-sm text-primary hover:underline flex items-center gap-1"
+                                                    >
+                                                        {leetcodeUsername}
+                                                        <ExternalLink className="h-3 w-3" />
+                                                    </a>
+                                                </div>
+                                            ) : (
+                                                <p className="text-sm text-muted-foreground">Not linked</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                    {hasLeetCodeLinked ? (
+                                        <Badge variant="secondary" className="bg-green-500/10 text-green-500">
+                                            <CheckCircle className="h-3 w-3 mr-1" />
+                                            Linked
+                                        </Badge>
+                                    ) : (
+                                        <Button variant="ghost" size="sm" asChild>
+                                            <Link href="/profile">Link</Link>
+                                        </Button>
+                                    )}
+                                </div>
+
+                                {/* GitHub Card */}
+                                <div className="flex items-center justify-between p-4 border rounded-lg bg-card/50">
+                                    <div className="flex items-center gap-4">
+                                        <div className="h-10 w-10 rounded-full bg-foreground/10 flex items-center justify-center">
+                                            <Github className="h-5 w-5" />
+                                        </div>
+                                        <div>
+                                            <p className="font-medium">GitHub</p>
+                                            {hasGitHubLinked ? (
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <a
+                                                        href={`https://github.com/${githubUsername}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-sm text-primary hover:underline flex items-center gap-1"
+                                                    >
+                                                        {githubUsername}
+                                                        <ExternalLink className="h-3 w-3" />
+                                                    </a>
+                                                </div>
+                                            ) : (
+                                                <p className="text-sm text-muted-foreground">Not linked</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                    {hasGitHubLinked ? (
+                                        <Badge variant="secondary" className="bg-green-500/10 text-green-500">
+                                            <CheckCircle className="h-3 w-3 mr-1" />
+                                            Linked
+                                        </Badge>
+                                    ) : (
+                                        <Button variant="ghost" size="sm" asChild>
+                                            <Link href="/profile">Link</Link>
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Verification Info */}
+                            {hasLeetCodeLinked && (
+                                <div className="mt-4 p-3 bg-primary/5 border border-primary/20 rounded-lg">
+                                    <div className="flex gap-3">
+                                        <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                                            <CheckCircle className="h-4 w-4 text-primary" />
+                                        </div>
+                                        <div className="text-sm">
+                                            <p className="font-medium text-foreground">LeetCode Verification Active</p>
+                                            <p className="text-muted-foreground mt-0.5">
+                                                You can only mark LeetCode problems as complete after solving them on your linked account.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
                 </TabsContent>
             </Tabs>
         </div>

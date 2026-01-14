@@ -1,10 +1,12 @@
 "use client";
 
+
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Code2, Github, Mic } from "lucide-react";
+import { Code2, Github, Mic, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -48,11 +50,15 @@ export function Navbar() {
         >
             <div className="container mx-auto px-8 md:px-12 flex h-16 items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-                        <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
-                            <Code2 className="h-5 w-5" />
-                        </div>
-                        <span>DSA Share</span>
+                    <Link href="/" className="flex items-center">
+                        <Image
+                            src="/logo-bauhaus.png"
+                            alt="prep4place"
+                            width={150}
+                            height={40}
+                            className="h-12 w-auto object-contain"
+                            priority
+                        />
                     </Link>
                 </div>
 
@@ -66,85 +72,72 @@ export function Navbar() {
                     >
                         Home
                     </Link>
-                    <Link
-                        href="/patterns"
-                        className={cn(
-                            "transition-colors hover:text-primary",
-                            pathname.startsWith("/patterns") ? "text-primary" : "text-muted-foreground"
-                        )}
-                    >
-                        Patterns
-                    </Link>
-                    <Link
-                        href="/resume-builder"
-                        className={cn(
-                            "transition-colors hover:text-primary",
-                            pathname === "/resume-builder" ? "text-primary" : "text-muted-foreground"
-                        )}
-                    >
-                        Resume
-                    </Link>
-                    <Link
-                        href="/interview"
-                        className={cn(
-                            "transition-colors hover:text-primary flex items-center gap-1.5",
-                            pathname.startsWith("/interview") ? "text-primary" : "text-muted-foreground"
-                        )}
-                    >
-                        <Mic className="w-3.5 h-3.5" />
-                        Interview
-                        <span className="text-[10px] px-1.5 py-0.5 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full font-semibold">
-                            NEW
-                        </span>
-                    </Link>
-                    {user && (
-                        <Link
-                            href="/dashboard"
-                            className={cn(
-                                "transition-colors hover:text-primary",
-                                pathname === "/dashboard" ? "text-primary" : "text-muted-foreground"
-                            )}
-                        >
-                            Dashboard
-                        </Link>
-                    )}
-                    <Link
-                        href="/roadmap"
-                        className={cn(
-                            "transition-colors hover:text-primary",
-                            pathname === "/roadmap" ? "text-primary" : "text-muted-foreground"
-                        )}
-                    >
-                        Roadmap
-                    </Link>
-                    <Link
-                        href="/think"
-                        className={cn(
-                            "transition-colors hover:text-primary",
-                            pathname === "/think" ? "text-primary" : "text-muted-foreground"
-                        )}
-                    >
-                        Think
-                    </Link>
-                    <Link
-                        href="/compiler"
-                        className={cn(
-                            "transition-colors hover:text-primary",
-                            pathname === "/compiler" ? "text-primary" : "text-muted-foreground"
-                        )}
-                    >
-                        Compiler
-                    </Link>
 
-                    <Link
-                        href="/community"
-                        className={cn(
-                            "transition-colors hover:text-primary",
-                            pathname === "/community" ? "text-primary" : "text-muted-foreground"
-                        )}
-                    >
-                        Community
-                    </Link>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="flex items-center gap-1 hover:text-primary transition-colors data-[state=open]:text-primary outline-none text-muted-foreground">
+                            Platform <ChevronDown className="h-4 w-4" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                            <DropdownMenuItem asChild>
+                                <Link href="/patterns" className="w-full cursor-pointer">DSA Patterns</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/resume-builder" className="w-full cursor-pointer">Resume Builder</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/compiler" className="w-full cursor-pointer">Online Compiler</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild>
+                                <Link href="/interview" className="w-full cursor-pointer justify-between flex items-center">
+                                    AI Interview
+                                    <span className="text-[10px] px-1.5 py-0.5 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full font-semibold ml-2">
+                                        NEW
+                                    </span>
+                                </Link>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="flex items-center gap-1 hover:text-primary transition-colors data-[state=open]:text-primary outline-none text-muted-foreground">
+                            Resources <ChevronDown className="h-4 w-4" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                            <DropdownMenuItem asChild>
+                                <Link href="/roadmap" className="w-full cursor-pointer">Roadmaps</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/think" className="w-full cursor-pointer">Think</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/community" className="w-full cursor-pointer">Community</Link>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    {user && (
+                        <>
+                            <Link
+                                href="/profile"
+                                className={cn(
+                                    "transition-colors hover:text-primary",
+                                    pathname === "/profile" ? "text-primary" : "text-muted-foreground"
+                                )}
+                            >
+                                Coding Profile
+                            </Link>
+                            <Link
+                                href="/dashboard"
+                                className={cn(
+                                    "transition-colors hover:text-primary",
+                                    pathname === "/dashboard" ? "text-primary" : "text-muted-foreground"
+                                )}
+                            >
+                                Dashboard
+                            </Link>
+                        </>
+                    )}
                 </nav>
 
                 <div className="flex items-center gap-2">
@@ -175,6 +168,17 @@ export function Navbar() {
                                         <p className="text-sm font-medium leading-none">{user.email}</p>
                                     </div>
                                 </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem asChild>
+                                    <Link href="/profile" className="w-full cursor-pointer">
+                                        Coding Profile
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link href="/dashboard" className="w-full cursor-pointer">
+                                        Dashboard
+                                    </Link>
+                                </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem onClick={() => signOut()}>
                                     Log out

@@ -95,6 +95,13 @@ const DownloadDropdown: React.FC<DownloadDropdownProps> = ({
         pixelRatio: 2,
         backgroundColor: '#ffffff',
         cacheBust: true,
+        filter: (node) => {
+          // Exclude elements with data-html2canvas-ignore attribute
+          if (node instanceof HTMLElement) {
+            return !node.hasAttribute('data-html2canvas-ignore');
+          }
+          return true;
+        },
       });
 
       // Create an image to get dimensions

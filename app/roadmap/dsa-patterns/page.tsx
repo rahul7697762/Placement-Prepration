@@ -1,22 +1,100 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { PlayCircle, Clock, FileCode, Users, Trophy, CheckCircle2, Circle, ArrowRight } from "lucide-react";
+import { PlayCircle, Clock, FileCode, Users, Trophy, CheckCircle2, Circle, ArrowRight, AlertCircle, Loader2, X, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { allPatterns, Pattern } from "@/lib/data";
+import { allPatterns, Pattern, Question } from "@/lib/data";
 import { useUserProgress } from "@/hooks/use-user-progress";
+import { useCodingProfile } from "@/hooks/use-coding-profile";
+import { extractLeetCodeSlug } from "@/lib/coding-profile";
 
 export default function DsaPatternsPage() {
     const { isQuestionComplete, toggleComplete, progress } = useUserProgress();
+    const { leetcodeUsername, hasLeetCodeLinked } = useCodingProfile();
+
+    // Verification state
+    const [verifyingQuestion, setVerifyingQuestion] = useState<Question | null>(null);
+    const [isVerifying, setIsVerifying] = useState(false);
+    const [verificationError, setVerificationError] = useState<string | null>(null);
+    const [showVerifyDialog, setShowVerifyDialog] = useState(false);
+
+    const verifyLeetCodeSolution = async (question: Question): Promise<boolean> => {
+        if (!leetcodeUsername) return true; // No verification if not linked
+
+        const problemSlug = extractLeetCodeSlug(question.link);
+        if (!problemSlug) {
+            // Not a LeetCode problem, allow marking
+            return true;
+        }
+
+        setIsVerifying(true);
+        setVerificationError(null);
+
+        try {
+            const response = await fetch(
+                `/api/leetcode/verify?username=${encodeURIComponent(leetcodeUsername)}&problemSlug=${encodeURIComponent(problemSlug)}`
+            );
+            const data = await response.json();
+
+            if (data.solved) {
+                return true;
+            } else {
+                setVerificationError(data.message || "Problem not solved on LeetCode yet");
+                return false;
+            }
+        } catch {
+            setVerificationError("Failed to verify LeetCode status");
+            return false;
+        } finally {
+            setIsVerifying(false);
+        }
+    };
+
+    const handleToggleComplete = async (question: Question, patternSlug: string) => {
+        const currentlyComplete = isQuestionComplete(question.id);
+
+        // If trying to mark as complete and LeetCode is linked
+        if (!currentlyComplete && hasLeetCodeLinked) {
+            const problemSlug = extractLeetCodeSlug(question.link);
+
+            // Only verify for LeetCode problems
+            if (problemSlug) {
+                setVerifyingQuestion(question);
+                setShowVerifyDialog(true);
+
+                const verified = await verifyLeetCodeSolution(question);
+
+                if (!verified) {
+                    // Don't mark complete, show error dialog
+                    return;
+                }
+
+                // Verified! Close dialog and mark complete
+                setShowVerifyDialog(false);
+                setVerifyingQuestion(null);
+            }
+        }
+
+        await toggleComplete(question.id, patternSlug, !currentlyComplete);
+    };
 
     // Calculate total progress based on user's actual progress
     const totalPatterns = allPatterns.length;
@@ -111,7 +189,7 @@ export default function DsaPatternsPage() {
                                                                 ${isComplete ? 'bg-green-500/5 hover:bg-green-500/10 border-green-500/20' : 'hover:bg-muted/50 hover:border-border'}
                                                             `}
                                                             onClick={(e) => {
-                                                                toggleComplete(problem.id, pattern.slug, !isComplete);
+                                                                handleToggleComplete(problem, pattern.slug);
                                                             }}
                                                         >
                                                             <div className="col-span-8 md:col-span-6 font-medium flex items-center gap-2 overflow-hidden">
@@ -160,6 +238,88 @@ export default function DsaPatternsPage() {
                     </Accordion>
                 </div>
             </div>
+
+            {/* LeetCode Verification Dialog */}
+            <Dialog open={showVerifyDialog} onOpenChange={(open) => {
+                if (!open) {
+                    setShowVerifyDialog(false);
+                    setVerifyingQuestion(null);
+                    setVerificationError(null);
+                }
+            }}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            {isVerifying ? (
+                                <>
+                                    <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                                    Verifying on LeetCode...
+                                </>
+                            ) : verificationError ? (
+                                <>
+                                    <AlertCircle className="h-5 w-5 text-destructive" />
+                                    Not Solved Yet
+                                </>
+                            ) : (
+                                <>
+                                    <CheckCircle2 className="h-5 w-5 text-green-500" />
+                                    Verified!
+                                </>
+                            )}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {verifyingQuestion?.title}
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="py-4">
+                        {isVerifying && (
+                            <div className="text-center text-muted-foreground">
+                                Checking your LeetCode submissions for <strong>{leetcodeUsername}</strong>...
+                            </div>
+                        )}
+
+                        {verificationError && (
+                            <div className="space-y-4">
+                                <div className="bg-destructive/10 text-destructive p-4 rounded-lg border border-destructive/20">
+                                    <p className="font-medium">Solve this problem on LeetCode first!</p>
+                                    <p className="text-sm mt-1 opacity-80">
+                                        We couldn't find an accepted submission for this problem
+                                        on your LeetCode account ({leetcodeUsername}).
+                                    </p>
+                                </div>
+
+                                <Button asChild className="w-full">
+                                    <a
+                                        href={verifyingQuestion?.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <ExternalLink className="h-4 w-4 mr-2" />
+                                        Solve on LeetCode
+                                    </a>
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+
+                    {verificationError && (
+                        <DialogFooter>
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    setShowVerifyDialog(false);
+                                    setVerifyingQuestion(null);
+                                    setVerificationError(null);
+                                }}
+                            >
+                                <X className="h-4 w-4 mr-2" />
+                                Close
+                            </Button>
+                        </DialogFooter>
+                    )}
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
