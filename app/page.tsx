@@ -98,7 +98,7 @@ export default function Home() {
       </section>
 
       {/* Main Features Grid */}
-      <section className="bg-secondary/20 py-24 relative">
+      <section className="bg-secondary/20 py-24 relative z-10">
         <div className="container mx-auto px-6 md:px-12">
           <div className="text-center mb-16 space-y-4">
             <h2 className="text-3xl md:text-5xl font-bold">Everything you need to succeed</h2>
@@ -195,7 +195,7 @@ export default function Home() {
       </section>
 
       {/* Resume Builder Showcase */}
-      <section className="container mx-auto px-6 md:px-12 py-24 md:py-32">
+      <section className="container mx-auto px-6 md:px-12 py-24 md:py-32 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 order-2 md:order-1">
             <h2 className="text-3xl md:text-5xl font-bold leading-tight">
@@ -253,7 +253,7 @@ export default function Home() {
       </section>
 
       {/* Patterns Grid Section */}
-      <section className="bg-secondary/20 py-24">
+      <section className="bg-secondary/20 py-24 relative z-10">
         <div className="container mx-auto px-6 md:px-12 space-y-12">
           <div className="flex flex-col md:flex-row items-end justify-between gap-4">
             <div className="space-y-2 max-w-2xl">
@@ -272,7 +272,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="container mx-auto px-6 md:px-12 py-24">
+      <section className="container mx-auto px-6 md:px-12 py-24 relative z-10">
         <div className="bg-primary rounded-[2.5rem] p-12 md:p-24 text-center text-primary-foreground relative overflow-hidden group">
           <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-10" />
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/20 rounded-full blur-[100px] group-hover:bg-white/30 transition-colors" />
