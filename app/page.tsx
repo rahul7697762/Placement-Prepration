@@ -20,11 +20,24 @@ import { Badge } from "@/components/ui/badge";
 export default function Home() {
   return (
     <main className="min-h-screen bg-background relative overflow-hidden">
+      {/* Hero Background Image */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: 'url(/landing-bg.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-background/85 dark:bg-background/90 z-0" />
+
       {/* Background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/20 rounded-full blur-[120px] -z-10 opacity-50 pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/20 rounded-full blur-[120px] z-0 opacity-50 pointer-events-none" />
 
       {/* Hero Section */}
-      <section className="container mx-auto px-6 md:px-12 py-24 md:py-32 text-center">
+      <section className="container mx-auto px-6 md:px-12 py-24 md:py-32 text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -153,8 +166,8 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 className={`group relative bg-background p-8 rounded-3xl border transition-all hover:shadow-lg hover:-translate-y-1 ${'isNew' in feature && feature.isNew
-                    ? "border-violet-500/50 hover:border-violet-500 ring-1 ring-violet-500/20"
-                    : "hover:border-primary/50"
+                  ? "border-violet-500/50 hover:border-violet-500 ring-1 ring-violet-500/20"
+                  : "hover:border-primary/50"
                   }`}
               >
                 {'isNew' in feature && feature.isNew && (
