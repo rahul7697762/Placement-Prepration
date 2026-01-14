@@ -42,6 +42,8 @@ export interface ResumeData {
 
     certifications: {
         year?: string;
+        startDate?: string;
+        endDate?: string;
         course?: string;
         institution?: string;
         issuer?: string;
@@ -51,6 +53,8 @@ export interface ResumeData {
     projects?: {
         title?: string;
         link?: string;
+        startDate?: string;
+        endDate?: string;
         description?: string;
     }[];
 
