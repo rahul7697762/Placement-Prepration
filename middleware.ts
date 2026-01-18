@@ -16,7 +16,9 @@ const PUBLIC_PATHS = [
 const SKIP_PATHS = [
     "/_next",
     "/favicon.ico",
-    "/api/health"
+    "/api/health",
+    "/sitemap.xml",
+    "/robots.txt"
 ];
 
 function isPublicPath(pathname: string): boolean {
