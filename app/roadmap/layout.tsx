@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { generateCourseSchema } from "@/lib/seo-schema";
 
 export const metadata: Metadata = {
     title: "DSA Roadmap - Structured Learning Path",
@@ -40,10 +41,25 @@ export const metadata: Metadata = {
     },
 };
 
+const jsonLd = generateCourseSchema({
+    name: "Complete DSA & Placement Preparation Roadmap",
+    description: "A comprehensive structured learning path to master Data Structures, Algorithms, and System Design for technical interviews.",
+    provider: "prep4place",
+});
+
 export default function RoadmapLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    return <>{children}</>;
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            {children}
+        </>
+    );
 }
+

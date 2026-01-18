@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { generateCourseSchema } from "@/lib/seo-schema";
 
 export const metadata: Metadata = {
     title: "DSA Patterns - Master Coding Interview Patterns",
@@ -41,10 +42,25 @@ export const metadata: Metadata = {
     },
 };
 
+const jsonLd = generateCourseSchema({
+    name: "Master DSA Patterns for Coding Interviews",
+    description: "Learn the 20+ most common coding patterns to solve 95% of algorithm questions including Sliding Window, Two Pointers, and DP.",
+    provider: "prep4place",
+});
+
 export default function PatternsLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    return <>{children}</>;
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            {children}
+        </>
+    );
 }
+

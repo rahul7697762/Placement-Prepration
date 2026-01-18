@@ -9,6 +9,12 @@ import { AuthProvider } from "@/contexts/AuthContext";
 
 import { Footer } from "@/components/footer";
 import { FeedbackButton } from "@/components/FeedbackModal";
+import {
+  defaultOrganizationSchema,
+  defaultWebsiteSchema,
+  generateFAQSchema,
+  homepageFAQs,
+} from "@/lib/seo-schema";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -95,6 +101,13 @@ export const metadata: Metadata = {
   category: "education",
 };
 
+// JSON-LD Structured Data for rich snippets
+const jsonLdData = [
+  defaultOrganizationSchema,
+  defaultWebsiteSchema,
+  generateFAQSchema(homepageFAQs),
+];
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -102,6 +115,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* JSON-LD Structured Data for SEO */}
+        {jsonLdData.map((schema, index) => (
+          <script
+            key={index}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(schema),
+            }}
+          />
+        ))}
+        {/* Preconnect for performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+      </head>
       <body className={`${inter.className} min-h-screen bg-background antialiased flex flex-col`} suppressHydrationWarning>
         <AuthProvider>
           <ThemeProvider
@@ -124,3 +153,4 @@ export default function RootLayout({
     </html>
   );
 }
+

@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { generateSoftwareAppSchema } from "@/lib/seo-schema";
 
 export const metadata: Metadata = {
     title: "Online Compiler - Code in Python, C++, Java & More",
@@ -40,10 +41,25 @@ export const metadata: Metadata = {
     },
 };
 
+const jsonLd = generateSoftwareAppSchema(
+    "prep4place Online Compiler",
+    "Zero-setup online IDE to practice, compile and run code in Python, Java, C++, and JavaScript.",
+    "DeveloperApplication"
+);
+
 export default function CompilerLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    return <>{children}</>;
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            {children}
+        </>
+    );
 }
+

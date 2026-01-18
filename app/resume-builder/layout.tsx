@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { generateSoftwareAppSchema } from "@/lib/seo-schema";
 
 export const metadata: Metadata = {
     title: "Resume Builder - Create ATS-Friendly Resumes",
@@ -40,10 +41,25 @@ export const metadata: Metadata = {
     },
 };
 
+const jsonLd = generateSoftwareAppSchema(
+    "prep4place Resume Builder",
+    "Free ATS-friendly resume builder for software engineers and freshers. Create professional resumes in minutes.",
+    "BusinessApplication"
+);
+
 export default function ResumeBuilderLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    return <>{children}</>;
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            {children}
+        </>
+    );
 }
+

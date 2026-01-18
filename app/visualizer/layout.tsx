@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { generateSoftwareAppSchema } from "@/lib/seo-schema";
 
 export const metadata: Metadata = {
     title: "Algorithm Visualizer - Interactive DSA Visualizations",
@@ -43,11 +44,26 @@ export const metadata: Metadata = {
     },
 };
 
+const jsonLd = generateSoftwareAppSchema(
+    "prep4place Algorithm Visualizer",
+    "Interactive visualization tool for learning Data Structures and Algorithms. Includes Sorting, Searching, Graphs, and Trees visualizations.",
+    "EducationalApplication"
+);
+
 export default function VisualizerLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    return <>{children}</>;
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            {children}
+        </>
+    );
 }
+
 
