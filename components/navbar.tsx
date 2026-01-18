@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
     Code2,
-    Github,
     Mic,
     ChevronDown,
     BookOpen,
@@ -213,11 +212,6 @@ export function Navbar() {
                 <div className="flex items-center gap-2">
                     <div className="hidden md:flex items-center gap-2">
                         <ModeToggle />
-                        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary" asChild>
-                            <a href="https://github.com/rahul7697762/Placement-Prepration" target="_blank" rel="noreferrer">
-                                <Github className="h-5 w-5" />
-                            </a>
-                        </Button>
                     </div>
 
                     {!user ? (
