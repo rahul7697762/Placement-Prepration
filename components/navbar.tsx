@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Code2, Github, Mic, ChevronDown } from "lucide-react";
+import { Code2, Github, Mic, ChevronDown, BookOpen } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -115,6 +115,20 @@ export function Navbar() {
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
+
+                    <Link
+                        href="/blog"
+                        className={cn(
+                            "transition-colors hover:text-primary flex items-center gap-1",
+                            pathname.startsWith("/blog") ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
+                        <BookOpen className="h-4 w-4" />
+                        Blog
+                        <span className="text-[10px] px-1.5 py-0.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full font-semibold ml-1">
+                            NEW
+                        </span>
+                    </Link>
 
                     {user && (
                         <>
