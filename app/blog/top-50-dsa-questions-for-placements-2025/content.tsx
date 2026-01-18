@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
     Calendar,
@@ -156,6 +157,17 @@ export default function BlogPostContent() {
                                 in technical interviews at FAANG, startups, and product companies. Master these patterns
                                 to boost your placement success rate by 10x.
                             </p>
+
+                            <div className="relative w-full aspect-video md:aspect-[21/9] rounded-2xl overflow-hidden mb-10 border border-white/10 shadow-2xl">
+                                <Image
+                                    src="/blog/dsa-banner.png"
+                                    alt="Top 50 DSA Questions for Placements 2024"
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+                            </div>
 
                             <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground mb-8">
                                 <span className="flex items-center gap-2">

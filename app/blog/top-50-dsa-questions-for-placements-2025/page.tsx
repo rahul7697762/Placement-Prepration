@@ -36,20 +36,29 @@ export const metadata: Metadata = {
         title: "Top 50 DSA Questions for Placements 2025 - Complete Guide",
         description: "Master the 50 most frequently asked DSA questions in FAANG interviews. Includes patterns, difficulty levels, and solving strategies.",
         type: "article",
-        url: "https://placement-prepration-woad.vercel.app/blog/top-50-dsa-questions-for-placements-2025",
+        url: "https://prep4place.com/blog/top-50-dsa-questions-for-placements-2025",
         publishedTime: "2025-01-18T00:00:00.000Z",
         modifiedTime: "2025-01-18T00:00:00.000Z",
         authors: ["prep4place Team"],
         tags: ["DSA", "Placement", "Interview", "FAANG", "LeetCode", "Coding Interview"],
+        images: [
+            {
+                url: "https://prep4place.com/blog/dsa-banner.png",
+                width: 1200,
+                height: 630,
+                alt: "Top 50 DSA Questions for Placements 2025",
+            },
+        ],
     },
     twitter: {
         card: "summary_large_image",
         title: "Top 50 DSA Questions for Placements 2025",
         description: "Master the 50 most frequently asked DSA questions in FAANG interviews. Complete guide with patterns and strategies.",
         creator: "@prep4place",
+        images: ["https://prep4place.com/blog/dsa-banner.png"],
     },
     alternates: {
-        canonical: "https://placement-prepration-woad.vercel.app/blog/top-50-dsa-questions-for-placements-2025",
+        canonical: "https://prep4place.com/blog/top-50-dsa-questions-for-placements-2025",
     },
 };
 
@@ -59,25 +68,25 @@ const jsonLd = {
     "@type": "Article",
     headline: "Top 50 DSA Questions You Must Solve for Placements in 2025",
     description: "A comprehensive guide to the most frequently asked Data Structures and Algorithms questions in technical interviews at FAANG, startups, and product companies.",
-    image: "https://placement-prepration-woad.vercel.app/blog/dsa-questions-cover.jpg",
+    image: "https://prep4place.com/blog/dsa-banner.png",
     datePublished: "2025-01-18T00:00:00.000Z",
     dateModified: "2025-01-18T00:00:00.000Z",
     author: {
         "@type": "Organization",
         name: "prep4place",
-        url: "https://placement-prepration-woad.vercel.app"
+        url: "https://prep4place.com"
     },
     publisher: {
         "@type": "Organization",
         name: "prep4place",
         logo: {
             "@type": "ImageObject",
-            url: "https://placement-prepration-woad.vercel.app/logo-bauhaus.png"
+            url: "https://prep4place.com/logo-bauhaus.png"
         }
     },
     mainEntityOfPage: {
         "@type": "WebPage",
-        "@id": "https://placement-prepration-woad.vercel.app/blog/top-50-dsa-questions-for-placements-2025"
+        "@id": "https://prep4place.com/blog/top-50-dsa-questions-for-placements-2025"
     }
 };
 
