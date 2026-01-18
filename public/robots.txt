@@ -1,0 +1,21 @@
+# https://www.robotstxt.org/robotstxt.html
+# prep4place.com - Placement Preparation Platform
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /auth/
+Disallow: /login/
+Disallow: /signup/
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap
+Sitemap: https://prep4place.com/sitemap.xml
+
+# Host
+Host: https://prep4place.com

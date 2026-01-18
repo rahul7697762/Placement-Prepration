@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Code2, Github, Mic, ChevronDown, BookOpen } from "lucide-react";
+import { Code2, Github, Mic, ChevronDown, BookOpen, BarChart3 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -125,7 +125,18 @@ export function Navbar() {
                     >
                         <BookOpen className="h-4 w-4" />
                         Blog
-                        <span className="text-[10px] px-1.5 py-0.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full font-semibold ml-1">
+                    </Link>
+
+                    <Link
+                        href="/visualizer"
+                        className={cn(
+                            "transition-colors hover:text-primary flex items-center gap-1",
+                            pathname.startsWith("/visualizer") ? "text-primary" : "text-muted-foreground"
+                        )}
+                    >
+                        <BarChart3 className="h-4 w-4" />
+                        Visualizer
+                        <span className="text-[10px] px-1.5 py-0.5 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-full font-semibold ml-1">
                             NEW
                         </span>
                     </Link>

@@ -43,18 +43,18 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://placement-prepration-woad.vercel.app"),
+  metadataBase: new URL("https://prep4place.com"),
   alternates: {
-    canonical: "https://placement-prepration-woad.vercel.app",
+    canonical: "/",
   },
   openGraph: {
     title: "prep4place - Complete Placement Preparation Platform",
     description: "Master DSA patterns, system design, resume building, and ace your interviews with AI-powered tools. LeetCode integration, 300+ curated problems, and comprehensive roadmaps.",
-    url: "https://placement-prepration-woad.vercel.app",
+    url: "https://prep4place.com",
     siteName: "prep4place",
     images: [
       {
-        url: "/logo-bauhaus.png",
+        url: "https://prep4place.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "prep4place - Your Complete Placement Preparation Platform",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "prep4place - Complete Placement Preparation Platform",
     description: "Master DSA patterns, system design, and ace your interviews with AI-powered tools. 300+ curated problems, LeetCode integration, and comprehensive roadmaps.",
-    images: ["/logo-bauhaus.png"],
+    images: ["https://prep4place.com/og-image.png"],
     creator: "@prep4place",
   },
   robots: {
