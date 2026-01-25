@@ -12,15 +12,145 @@ import {
     Target,
     TrendingUp,
     Award,
-    Zap
+    Zap,
+    Clock,
+    Edit2,
+    CheckCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { User } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
+import {
+    getUserStats,
+    getRecentActivity,
+    getPersonalizedRecommendations,
+    getWeeklyGoal,
+    updateWeeklyGoal
+} from "@/lib/services/dashboard-service";
+import { Input } from "@/components/ui/input";
+
+interface Stats {
+    problemsSolved: number;
+    dayStreak: number;
+    patternsMastered: number;
+    thisWeek: number;
+}
+
+interface Activity {
+    id: string;
+    question_name: string;
+    pattern_name: string;
+    completed: boolean;
+    difficulty: string;
+    completed_at: string;
+}
+
+interface Recommendation {
+    title: string;
+    description: string;
+    progress: number;
+    total: number;
+    link: string;
+    color: string;
+}
+
+interface WeeklyGoalData {
+    target_problems: number;
+    completed_problems: number;
+}
 
 // Personalized Homepage for Logged-In Users
 export default function AuthenticatedHome({ user }: { user: User }) {
+    const [stats, setStats] = useState<Stats>({
+        problemsSolved: 0,
+        dayStreak: 0,
+        patternsMastered: 0,
+        thisWeek: 0
+    });
+    const [recentActivity, setRecentActivity] = useState<Activity[]>([]);
+    const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+    const [weeklyGoal, setWeeklyGoal] = useState<WeeklyGoalData>({
+        target_problems: 10,
+        completed_problems: 0
+    });
+    const [isEditingGoal, setIsEditingGoal] = useState(false);
+    const [newGoalTarget, setNewGoalTarget] = useState(10);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchDashboardData() {
+            try {
+                setLoading(true);
+
+                // Fetch all data in parallel
+                const [statsData, activityData, recommendationsData, goalData] = await Promise.all([
+                    getUserStats(user.id),
+                    getRecentActivity(user.id, 5),
+                    getPersonalizedRecommendations(user.id),
+                    getWeeklyGoal(user.id)
+                ]);
+
+                setStats(statsData);
+                setRecentActivity(activityData);
+                setRecommendations(recommendationsData);
+                setWeeklyGoal({
+                    target_problems: goalData.target_problems,
+                    completed_problems: goalData.completed_problems
+                });
+                setNewGoalTarget(goalData.target_problems);
+            } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchDashboardData();
+    }, [user.id]);
+
+    const handleUpdateGoal = async () => {
+        try {
+            await updateWeeklyGoal(user.id, newGoalTarget);
+            setWeeklyGoal(prev => ({ ...prev, target_problems: newGoalTarget }));
+            setIsEditingGoal(false);
+        } catch (error) {
+            console.error('Error updating goal:', error);
+        }
+    };
+
+    const getTimeOfDay = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) return "morning";
+        if (hour < 18) return "afternoon";
+        return "evening";
+    };
+
+    const formatTimeAgo = (dateString: string) => {
+        const date = new Date(dateString);
+        const now = new Date();
+        const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+        if (seconds < 60) return "just now";
+        if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+        if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+        return `${Math.floor(seconds / 86400)}d ago`;
+    };
+
+    const getDifficultyColor = (difficulty: string) => {
+        switch (difficulty) {
+            case 'Easy': return 'text-green-500';
+            case 'Medium': return 'text-yellow-500';
+            case 'Hard': return 'text-red-500';
+            default: return 'text-muted-foreground';
+        }
+    };
+
+    const goalProgress = weeklyGoal.target_problems > 0
+        ? (weeklyGoal.completed_problems / weeklyGoal.target_problems) * 100
+        : 0;
+
     return (
         <main className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
             {/* Welcome Hero Section */}
@@ -33,23 +163,27 @@ export default function AuthenticatedHome({ user }: { user: User }) {
                 >
                     <div className="flex items-center gap-3">
                         <div className="h-12 w-12 rounded-full bg-primary/20 flex items-center justify-center">
-                            <span className="text-2xl">👋</span>
+                            <span className="text-2xl">
+                                {getTimeOfDay() === 'morning' ? '🌅' : getTimeOfDay() === 'afternoon' ? '☀️' : '🌙'}
+                            </span>
                         </div>
                         <div>
                             <h1 className="text-3xl md:text-4xl font-bold">
-                                Welcome back, {user.user_metadata?.full_name || user.email?.split('@')[0] || 'there'}!
+                                Good {getTimeOfDay()}, {user.user_metadata?.full_name || user.email?.split('@')[0] || 'there'}!
                             </h1>
-                            <p className="text-muted-foreground">Ready to continue your learning journey?</p>
+                            <p className="text-muted-foreground">
+                                {loading ? 'Loading your progress...' : 'Keep up the great work! 🚀'}
+                            </p>
                         </div>
                     </div>
 
                     {/* Quick Stats */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
                         {[
-                            { icon: Target, label: "Problems Solved", value: "0", color: "text-blue-500", bg: "bg-blue-500/10" },
-                            { icon: TrendingUp, label: "Day Streak", value: "0", color: "text-green-500", bg: "bg-green-500/10" },
-                            { icon: Award, label: "Patterns Mastered", value: "0", color: "text-purple-500", bg: "bg-purple-500/10" },
-                            { icon: Zap, label: "This Week", value: "0", color: "text-orange-500", bg: "bg-orange-500/10" },
+                            { icon: Target, label: "Problems Solved", value: stats.problemsSolved, color: "text-blue-500", bg: "bg-blue-500/10" },
+                            { icon: TrendingUp, label: "Day Streak", value: stats.dayStreak, color: "text-green-500", bg: "bg-green-500/10", suffix: stats.dayStreak > 0 ? "🔥" : "" },
+                            { icon: Award, label: "Patterns Mastered", value: stats.patternsMastered, color: "text-purple-500", bg: "bg-purple-500/10" },
+                            { icon: Zap, label: "This Week", value: stats.thisWeek, color: "text-orange-500", bg: "bg-orange-500/10" },
                         ].map((stat, idx) => (
                             <motion.div
                                 key={idx}
@@ -61,13 +195,107 @@ export default function AuthenticatedHome({ user }: { user: User }) {
                                 <div className={`w-10 h-10 ${stat.bg} rounded-xl flex items-center justify-center mb-3`}>
                                     <stat.icon className={`w-5 h-5 ${stat.color}`} />
                                 </div>
-                                <div className="text-2xl font-bold mb-1">{stat.value}</div>
+                                <div className="text-2xl font-bold mb-1">
+                                    {loading ? "..." : stat.value} {stat.suffix}
+                                </div>
                                 <div className="text-sm text-muted-foreground">{stat.label}</div>
                             </motion.div>
                         ))}
                     </div>
+
+                    {/* Weekly Goal Card */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="bg-gradient-to-r from-primary/10 to-purple-500/10 rounded-2xl p-6 border border-primary/20"
+                    >
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-2">
+                                <Target className="h-5 w-5 text-primary" />
+                                <h3 className="font-semibold">Weekly Goal</h3>
+                            </div>
+                            {!isEditingGoal ? (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => setIsEditingGoal(true)}
+                                >
+                                    <Edit2 className="h-4 w-4 mr-2" />
+                                    Edit
+                                </Button>
+                            ) : (
+                                <div className="flex gap-2">
+                                    <Input
+                                        type="number"
+                                        value={newGoalTarget}
+                                        onChange={(e) => setNewGoalTarget(parseInt(e.target.value) || 10)}
+                                        className="w-20 h-8"
+                                        min="1"
+                                    />
+                                    <Button size="sm" onClick={handleUpdateGoal}>
+                                        <CheckCircle className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between text-sm">
+                                <span className="text-muted-foreground">Progress</span>
+                                <span className="font-medium">
+                                    {weeklyGoal.completed_problems}/{weeklyGoal.target_problems} problems
+                                </span>
+                            </div>
+                            <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${Math.min(goalProgress, 100)}%` }}
+                                    transition={{ duration: 1, delay: 0.5 }}
+                                    className="h-full bg-gradient-to-r from-primary to-purple-600"
+                                />
+                            </div>
+                            {goalProgress >= 100 && (
+                                <p className="text-sm text-primary font-medium">
+                                    🎉 Congratulations! You've reached your weekly goal!
+                                </p>
+                            )}
+                        </div>
+                    </motion.div>
                 </motion.div>
             </section>
+
+            {/* Recent Activity Feed */}
+            {recentActivity.length > 0 && (
+                <section className="container mx-auto px-6 md:px-12 py-8">
+                    <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                        <Clock className="h-6 w-6 text-primary" />
+                        Recent Activity
+                    </h2>
+                    <div className="space-y-3">
+                        {recentActivity.map((activity, idx) => (
+                            <motion.div
+                                key={activity.id}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="bg-card rounded-xl p-4 border border-border/50 flex items-center justify-between hover:border-primary/30 transition-all"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className={`w-2 h-2 rounded-full ${activity.completed ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                                    <div>
+                                        <h4 className="font-medium">{activity.question_name}</h4>
+                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                            <Badge variant="outline" className="text-xs">{activity.pattern_name}</Badge>
+                                            <span className={getDifficultyColor(activity.difficulty)}>{activity.difficulty}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span className="text-sm text-muted-foreground">{formatTimeAgo(activity.completed_at)}</span>
+                            </motion.div>
+                        ))}
+                    </div>
+                </section>
+            )}
 
             {/* Quick Access Cards */}
             <section className="container mx-auto px-6 md:px-12 py-12">
@@ -160,7 +388,7 @@ export default function AuthenticatedHome({ user }: { user: User }) {
                 </div>
             </section>
 
-            {/* Recommended for You */}
+            {/* Personalized Recommendations */}
             <section className="container mx-auto px-6 md:px-12 py-12">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold">Recommended for You</h2>
@@ -171,32 +399,7 @@ export default function AuthenticatedHome({ user }: { user: User }) {
                     </Link>
                 </div>
                 <div className="grid md:grid-cols-3 gap-6">
-                    {[
-                        {
-                            title: "Blind 75 Problems",
-                            description: "Most efficient interview prep strategy",
-                            progress: 0,
-                            total: 75,
-                            link: "/roadmap/blind-75",
-                            color: "bg-blue-500"
-                        },
-                        {
-                            title: "DSA Patterns",
-                            description: "Master core algorithm patterns",
-                            progress: 0,
-                            total: 20,
-                            link: "/patterns",
-                            color: "bg-purple-500"
-                        },
-                        {
-                            title: "System Design",
-                            description: "Learn scalable architecture",
-                            progress: 0,
-                            total: 15,
-                            link: "/roadmap",
-                            color: "bg-green-500"
-                        },
-                    ].map((item, idx) => (
+                    {recommendations.map((item, idx) => (
                         <Link key={idx} href={item.link}>
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
