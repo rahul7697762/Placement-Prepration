@@ -16,8 +16,51 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { User } from "@supabase/supabase-js";
+import AuthenticatedHome from "@/components/authenticated-home";
 
 export default function Home() {
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (session?.user) {
+        setUser(session.user);
+      }
+      setIsCheckingAuth(false);
+    };
+
+    checkUser();
+
+    // Subscribe to auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Show loading while checking authentication
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // Show personalized homepage for logged-in users
+  if (user) {
+    return <AuthenticatedHome user={user} />;
+  }
+
+  // Show marketing landing page for logged-out users
+
   return (
     <main className="min-h-screen bg-background relative overflow-hidden">
       {/* Hero Background Image */}
