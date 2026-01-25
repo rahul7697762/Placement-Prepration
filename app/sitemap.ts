@@ -52,10 +52,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.9,
         },
         {
-            url: `${baseUrl}/blog/top-50-dsa-questions-for-placements-2025`,
+            url: `${baseUrl}/blog/blind-75-leetcode-problems-complete-guide-2025`,
             lastModified: currentDate,
             changeFrequency: 'weekly',
             priority: 0.95,
+        },
+        {
+            url: `${baseUrl}/blog/top-50-dsa-questions-for-placements-2025`,
+            lastModified: currentDate,
+            changeFrequency: 'weekly',
+            priority: 0.9,
         },
         // Roadmaps - High Priority
         {
@@ -63,6 +69,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             lastModified: currentDate,
             changeFrequency: 'weekly',
             priority: 0.85,
+        },
+        {
+            url: `${baseUrl}/roadmap/blind-75`,
+            lastModified: currentDate,
+            changeFrequency: 'weekly',
+            priority: 0.95,
         },
         {
             url: `${baseUrl}/roadmap/dsa-patterns`,

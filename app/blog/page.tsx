@@ -12,6 +12,18 @@ import { cn } from "@/lib/utils";
 // Blog posts data
 const blogPosts = [
     {
+        id: "blind-75-leetcode-problems-complete-guide-2025",
+        title: "Blind 75 LeetCode Problems: Complete Interview Prep Guide 2025",
+        excerpt: "Master the most efficient curated list of 75 LeetCode problems to crack coding interviews at Google, Amazon, Microsoft, Meta. Comprehensive guide with categorized problems, patterns, 8-week study plan, and expert tips.",
+        coverImage: "/blog/blind-75-banner.png",
+        author: "prep4place Team",
+        date: "January 25, 2025",
+        readTime: "20 min read",
+        category: "DSA",
+        tags: ["Blind 75", "LeetCode", "Interview Prep", "FAANG", "DSA", "Coding Interview"],
+        featured: true,
+    },
+    {
         id: "top-50-dsa-questions-for-placements-2025",
         title: "Top 50 DSA Questions You Must Solve for Placements in 2025",
         excerpt: "A comprehensive guide to the most frequently asked Data Structures and Algorithms questions in technical interviews at FAANG, startups, and product companies. Includes company-specific patterns and solving strategies.",
@@ -21,7 +33,7 @@ const blogPosts = [
         readTime: "15 min read",
         category: "DSA",
         tags: ["DSA", "Interview", "Placement", "FAANG", "LeetCode"],
-        featured: true,
+        featured: false,
     },
 ];
 

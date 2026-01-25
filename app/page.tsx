@@ -271,6 +271,82 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Featured Blog Section */}
+      <section className="container mx-auto px-6 md:px-12 py-24 relative z-10">
+        <div className="text-center mb-12 space-y-4">
+          <Badge variant="outline" className="px-4 py-2 text-sm bg-primary/10 border-primary/20">
+            📚 Latest from Our Blog
+          </Badge>
+          <h2 className="text-3xl md:text-5xl font-bold">Interview Preparation Guides</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Expert insights and strategies to help you ace your tech interviews
+          </p>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="max-w-5xl mx-auto"
+        >
+          <Link href="/blog/blind-75-leetcode-problems-complete-guide-2025">
+            <article className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10 border border-border/50 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10">
+              <div className="grid md:grid-cols-5 gap-0">
+                {/* Image Section */}
+                <div className="md:col-span-2 relative h-64 md:h-auto bg-gradient-to-br from-purple-900 via-blue-900 to-purple-900 overflow-hidden">
+                  <div className="absolute inset-0 bg-[url('/blog/blind-75-banner.png')] bg-cover bg-center group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/20" />
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-primary/90 text-primary-foreground border-none backdrop-blur-sm">
+                      ⭐ Featured
+                    </Badge>
+                  </div>
+                </div>
+
+                {/* Content Section */}
+                <div className="md:col-span-3 p-8 md:p-12 flex flex-col justify-center">
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <Badge variant="secondary" className="text-xs">Blind 75</Badge>
+                    <Badge variant="secondary" className="text-xs">LeetCode</Badge>
+                    <Badge variant="secondary" className="text-xs">Interview Prep</Badge>
+                  </div>
+
+                  <h3 className="text-2xl md:text-3xl font-bold mb-4 group-hover:text-primary transition-colors">
+                    Blind 75 LeetCode Problems: Complete Interview Guide 2025
+                  </h3>
+
+                  <p className="text-muted-foreground mb-6 line-clamp-3 leading-relaxed">
+                    Master the most efficient curated list of 75 LeetCode problems to crack coding interviews at Google, Amazon, Microsoft, and Meta. Includes 8-week study plan, categorized problems, and expert tips.
+                  </p>
+
+                  <div className="flex items-center gap-6 text-sm text-muted-foreground mb-6">
+                    <span>📅 Jan 25, 2025</span>
+                    <span>⏱️ 20 min read</span>
+                    <span>✍️ prep4place Team</span>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <span className="font-medium text-primary flex items-center gap-2 group-hover:gap-3 transition-all">
+                      Read Full Guide <ArrowRight className="h-4 w-4" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </Link>
+
+          {/* Additional Blog Links */}
+          <div className="mt-8 text-center">
+            <Link href="/blog">
+              <Button variant="outline" size="lg" className="group">
+                View All Blog Posts <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </div>
+        </motion.div>
+      </section>
+
       {/* CTA Section */}
       <section className="container mx-auto px-6 md:px-12 py-24 relative z-10">
         <div className="bg-primary rounded-[2.5rem] p-12 md:p-24 text-center text-primary-foreground relative overflow-hidden group">

@@ -31,6 +31,28 @@ const roadmapData: RoadmapPhase[] = [
         link: "/roadmap/dsa-patterns",
         isTrack: true,
     },
+    {
+        title: "Blind 75",
+        description: "The most popular curated list of 75 essential LeetCode problems for technical interview preparation.",
+        topics: [
+            { name: "Arrays, Strings & Hashing" },
+            { name: "Trees, Graphs & DP" },
+            { name: "Linked Lists & Intervals" },
+        ],
+        link: "/roadmap/blind-75",
+        isTrack: true,
+    },
+    {
+        title: "Computer Vision (INT345)",
+        description: "Comprehensive guide to Image Processing, Camera Geometry, and Deep Learning for Vision.",
+        topics: [
+            { name: "Image Processing & Filtering" },
+            { name: "Camera Models & Stereo Vision" },
+            { name: "Feature Detection & Segmentation" },
+        ],
+        link: "/roadmap/computer-vision",
+        isTrack: true,
+    },
 ];
 
 export default function RoadmapPage() {
