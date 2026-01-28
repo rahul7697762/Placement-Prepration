@@ -19,7 +19,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { PlayCircle, Clock, FileCode, Users, Trophy, CheckCircle2, Circle, ArrowRight, AlertCircle, Loader2, X, ExternalLink } from "lucide-react";
+import { PlayCircle, Clock, FileCode, Users, Trophy, CheckCircle2, Circle, ArrowRight, AlertCircle, Loader2, X, ExternalLink, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { allPatterns, Pattern, Question } from "@/lib/data";
 import { useUserProgress } from "@/hooks/use-user-progress";
@@ -199,8 +199,7 @@ export default function DsaPatternsPage() {
                                                                     <Circle className="h-4 w-4 text-muted-foreground shrink-0 group-hover:text-primary transition-colors" />
                                                                 )}
                                                                 <Link
-                                                                    href={problem.link}
-                                                                    target="_blank"
+                                                                    href={`/roadmap/dsa-patterns/${pattern.slug}/${problem.id}`}
                                                                     className={`truncate hover:underline ${isComplete ? 'text-muted-foreground line-through decoration-muted-foreground/50' : ''}`}
                                                                     onClick={(e) => e.stopPropagation()}
                                                                 >
@@ -216,9 +215,9 @@ export default function DsaPatternsPage() {
                                                                 </span>
                                                             </div>
                                                             <div className="col-span-0 md:col-span-3 text-center hidden md:flex justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                <Link href={problem.link} target="_blank">
+                                                                <Link href={`/roadmap/dsa-patterns/${pattern.slug}/${problem.id}`}>
                                                                     <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                                                        <ArrowRight className="h-4 w-4" />
+                                                                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
                                                                     </Button>
                                                                 </Link>
                                                             </div>

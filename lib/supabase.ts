@@ -218,3 +218,67 @@ export async function createComment(comment: Omit<Comment, 'id' | 'created_at'>,
 
     return data as Comment
 }
+
+// Solutions types
+export interface Solution {
+    id: string
+    question_id: string
+    title?: string // Optional display title
+    content: string
+    video_url?: string
+    code_snippet?: string
+    language?: string
+    created_at?: string
+    updated_at?: string
+}
+
+// Solutions Helper functions
+export async function getSolution(questionId: string) {
+    const { data, error } = await supabase
+        .from('solutions')
+        .select('*')
+        .eq('question_id', questionId)
+        .single() // Expecting at most one solution per question
+
+    if (error) {
+        if (error.code !== 'PGRST116') { // Ignore "Row not found" error
+            console.error('Error fetching solution:', JSON.stringify(error, null, 2))
+        }
+        return null
+    }
+
+    return data as Solution
+}
+
+export async function upsertSolution(solution: Omit<Solution, 'id' | 'created_at' | 'updated_at'>) {
+    // Check if exists first to get ID for update or just use upsert
+    // upsert requires a unique constraint on question_id
+    const { data, error } = await supabase
+        .from('solutions')
+        .upsert(
+            { ...solution, updated_at: new Date().toISOString() },
+            { onConflict: 'question_id' }
+        )
+        .select()
+        .single()
+
+    if (error) {
+        console.error('Error upserting solution:', JSON.stringify(error, null, 2))
+        return null
+    }
+
+    return data as Solution
+}
+
+export async function getAllSolutions() {
+    const { data, error } = await supabase
+        .from('solutions')
+        .select('question_id, id, updated_at')
+
+    if (error) {
+        console.error('Error fetching all solutions:', JSON.stringify(error, null, 2))
+        return []
+    }
+
+    return data as Partial<Solution>[]
+}
