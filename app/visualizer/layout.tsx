@@ -19,9 +19,6 @@ export const metadata: Metadata = {
         "placement preparation tools",
         "coding interview visualization"
     ],
-    alternates: {
-        canonical: "/visualizer",
-    },
     openGraph: {
         title: "Algorithm Visualizer - Interactive DSA Visualizations | prep4place",
         description: "Learn DSA through interactive visualizations. Explore sorting, searching, graphs, and trees.",

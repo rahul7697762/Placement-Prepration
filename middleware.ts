@@ -9,7 +9,16 @@ const PUBLIC_PATHS = [
     "/signup",
     "/auth/callback",
     "/auth/auth-code-error",
-    "/feedback"
+    "/feedback",
+    "/patterns",
+    "/roadmap",
+    "/blog",
+    "/visualizer",
+    "/about",
+    "/privacy-policy",
+    "/community",
+    "/think",
+    "/coding-stats",
 ];
 
 // Paths that should skip middleware entirely (static files, api routes that handle their own auth)
@@ -18,7 +27,8 @@ const SKIP_PATHS = [
     "/favicon.ico",
     "/api/health",
     "/sitemap.xml",
-    "/robots.txt"
+    "/robots.txt",
+    "/manifest.json",
 ];
 
 function isPublicPath(pathname: string): boolean {
@@ -91,9 +101,13 @@ export async function middleware(request: NextRequest) {
         }
     );
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    let user = null;
+    try {
+        const { data } = await supabase.auth.getUser();
+        user = data.user;
+    } catch {
+        // Supabase unreachable — treat as unauthenticated
+    }
 
     // Only log in development
     if (process.env.NODE_ENV === "development") {

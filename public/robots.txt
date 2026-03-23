@@ -7,6 +7,13 @@ Disallow: /api/
 Disallow: /auth/
 Disallow: /login/
 Disallow: /signup/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /admin/
+Disallow: /interview/session/
+Disallow: /interview/permission/
+Disallow: /interview/history/
+Disallow: /interview/feedback/
 
 User-agent: Googlebot
 Allow: /

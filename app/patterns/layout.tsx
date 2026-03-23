@@ -17,9 +17,6 @@ export const metadata: Metadata = {
         "FAANG interview patterns",
         "data structures patterns",
     ],
-    alternates: {
-        canonical: "/patterns",
-    },
     openGraph: {
         title: "DSA Patterns - Master Coding Interview Patterns | prep4place",
         description: "Master 20+ essential coding patterns that solve 95% of interview questions.",

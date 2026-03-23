@@ -16,9 +16,6 @@ export const metadata: Metadata = {
         "DSA learning order",
         "coding interview guide",
     ],
-    alternates: {
-        canonical: "/roadmap",
-    },
     openGraph: {
         title: "DSA Roadmap - Structured Learning Path | prep4place",
         description: "Structured learning paths from beginner to interview-ready. Master DSA with curated roadmaps.",

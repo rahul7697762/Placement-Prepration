@@ -50,9 +50,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL("https://prep4place.com"),
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     title: "prep4place - Complete Placement Preparation Platform",
     description: "Master DSA patterns, system design, resume building, and ace your interviews with AI-powered tools. LeetCode integration, 300+ curated problems, and comprehensive roadmaps.",
