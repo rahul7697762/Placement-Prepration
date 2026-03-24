@@ -292,7 +292,7 @@ export default function PatternPage() {
                                                                                     ? "default"
                                                                                     : "destructive"
                                                                         }
-                                                                        className={`text-xs px-2 py-0.5 ${question.difficulty === "Easy" ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" : question.difficulty === "Medium" ? "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20" : "bg-red-500/10 text-red-500 hover:bg-red-500/20"}`}
+                                                                        className={`text-xs px-2 py-0.5 ${question.difficulty === "Easy" ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" : question.difficulty === "Medium" ? "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20" : "bg-fuchsia-500/10 text-fuchsia-500 hover:bg-fuchsia-500/20"}`}
                                                                     >
                                                                         {question.difficulty}
                                                                     </Badge>

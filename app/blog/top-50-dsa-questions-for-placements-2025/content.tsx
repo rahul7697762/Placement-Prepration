@@ -98,7 +98,7 @@ const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
         case "Easy": return "bg-green-500/20 text-green-500 border-green-500/30";
         case "Medium": return "bg-yellow-500/20 text-yellow-500 border-yellow-500/30";
-        case "Hard": return "bg-red-500/20 text-red-500 border-red-500/30";
+        case "Hard": return "bg-fuchsia-500/20 text-fuchsia-500 border-fuchsia-500/30";
         default: return "bg-muted text-muted-foreground";
     }
 };
@@ -449,8 +449,8 @@ export default function BlogPostContent() {
                                     ))}
                                 </div>
 
-                                <div className="mt-8 p-6 bg-red-500/10 rounded-xl border border-red-500/20">
-                                    <h4 className="font-semibold text-red-400 mb-3">💡 Pro Tip for DP Problems</h4>
+                                <div className="mt-8 p-6 bg-fuchsia-500/10 rounded-xl border border-fuchsia-500/20">
+                                    <h4 className="font-semibold text-fuchsia-400 mb-3">💡 Pro Tip for DP Problems</h4>
                                     <p className="text-muted-foreground text-sm">
                                         Start every DP problem by defining the <strong>state</strong> (what does dp[i] represent?), then the
                                         <strong> transition</strong> (how do you get dp[i] from previous states?), and finally the <strong>base case</strong>.

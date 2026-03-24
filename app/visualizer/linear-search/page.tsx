@@ -104,7 +104,7 @@ export default function LinearSearchPage() {
             case "current": return "bg-yellow-500 scale-110";
             case "found": return "bg-green-500 scale-125 shadow-lg shadow-green-500/50";
             case "checked": return "bg-muted-foreground/30";
-            case "not-found": return "bg-red-500/50";
+            case "not-found": return "bg-fuchsia-500/50";
             default: return "bg-primary";
         }
     };
@@ -331,7 +331,7 @@ export default function LinearSearchPage() {
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-muted-foreground">Worst Case</span>
-                                        <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/20">
+                                        <Badge variant="outline" className="bg-fuchsia-500/10 text-fuchsia-500 border-fuchsia-500/20">
                                             O(n)
                                         </Badge>
                                     </div>

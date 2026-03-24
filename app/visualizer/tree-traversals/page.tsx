@@ -311,7 +311,7 @@ export default function TreeTraversalsPage() {
             name: "Level Order",
             order: "Level by level (BFS)",
             use: "Find shortest path, level-wise processing",
-            color: "from-orange-500 to-red-500",
+            color: "from-orange-500 to-amber-500",
         },
     };
 

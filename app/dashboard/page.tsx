@@ -137,19 +137,24 @@ export default function DashboardPage() {
 
 
     return (
-        <div className="flex-1 space-y-4 p-8 pt-6">
-            <div className="flex items-center justify-between space-y-2">
-                <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-                <div className="flex items-center space-x-2">
+        <div className="flex-1 space-y-8 p-8 pt-8 relative overflow-hidden bg-primary/5 min-h-screen">
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[url('/grid.svg')] opacity-20 border-b-8 border-l-8 border-foreground pointer-events-none" />
+            
+            <div className="flex items-center justify-between space-y-2 relative z-10">
+                <div className="space-y-1">
+                    <h2 className="text-4xl font-black uppercase tracking-tighter bg-foreground text-background inline-block px-4 py-1 border-4 border-foreground">System Dashboard</h2>
+                    <p className="font-mono text-xs uppercase font-bold tracking-widest text-foreground mt-2">Active Node: {userName}</p>
+                </div>
+                <div className="flex items-center space-x-4">
                     <div className="grid gap-2">
-                        <Button variant="outline" className="w-[260px] justify-start text-left font-normal" id="date">
+                        <Button variant="outline" className="w-[260px] justify-start text-left font-mono font-bold tracking-widest text-xs uppercase rounded-none border-2 border-foreground bg-background h-12" id="date">
                             <Calendar className="mr-2 h-4 w-4" />
-                            <span>Since Joining</span>
+                            <span>Since genesis</span>
                         </Button>
                     </div>
-                    <Button>
+                    <Button className="rounded-none border-2 border-foreground bg-primary text-primary-foreground brutalist-shadow-hover hover:bg-primary font-bold uppercase tracking-widest text-xs h-12">
                         <Download className="mr-2 h-4 w-4" />
-                        Download Report
+                        Export Log
                     </Button>
                 </div>
             </div>
@@ -166,9 +171,9 @@ export default function DashboardPage() {
                         Notifications
                     </TabsTrigger>
                 </TabsList>
-                <TabsContent value="overview" className="space-y-4">
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                        <Card>
+                <TabsContent value="overview" className="space-y-6 relative z-10">
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                        <Card className="rounded-none border-4 border-foreground brutalist-shadow bg-background">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">
                                     Total Progress
@@ -182,7 +187,7 @@ export default function DashboardPage() {
                                 </p>
                             </CardContent>
                         </Card>
-                        <Card>
+                        <Card className="rounded-none border-4 border-foreground brutalist-shadow bg-secondary">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">
                                     Questions Solved
@@ -196,7 +201,7 @@ export default function DashboardPage() {
                                 </p>
                             </CardContent>
                         </Card>
-                        <Card>
+                        <Card className="rounded-none border-4 border-foreground brutalist-shadow bg-background">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">Active Patterns</CardTitle>
                                 <Target className="h-4 w-4 text-muted-foreground" />
@@ -210,7 +215,7 @@ export default function DashboardPage() {
                                 </p>
                             </CardContent>
                         </Card>
-                        <Card>
+                        <Card className="rounded-none border-4 border-foreground brutalist-shadow bg-primary text-primary-foreground">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-sm font-medium">
                                     Current Streak
@@ -225,8 +230,8 @@ export default function DashboardPage() {
                             </CardContent>
                         </Card>
                     </div>
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                        <Card className="col-span-4">
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+                        <Card className="col-span-4 rounded-none border-4 border-foreground brutalist-shadow bg-background">
                             <CardHeader>
                                 <CardTitle>Activity Overview</CardTitle>
                                 <CardDescription>Problems solved per month</CardDescription>
@@ -247,7 +252,7 @@ export default function DashboardPage() {
                                 </div>
                             </CardContent>
                         </Card>
-                        <Card className="col-span-3">
+                        <Card className="col-span-3 rounded-none border-4 border-foreground brutalist-shadow bg-background">
                             <CardHeader>
                                 <CardTitle>Recent Activity</CardTitle>
                                 <CardDescription>
@@ -285,7 +290,7 @@ export default function DashboardPage() {
                     </div>
 
                     {/* Coding Profile Section */}
-                    <Card>
+                    <Card className="rounded-none border-4 border-foreground brutalist-shadow bg-background">
                         <CardHeader className="flex flex-row items-center justify-between">
                             <div>
                                 <CardTitle className="flex items-center gap-2">
@@ -296,7 +301,7 @@ export default function DashboardPage() {
                                     Linked accounts for automatic verification
                                 </CardDescription>
                             </div>
-                            <Button variant="outline" asChild>
+                            <Button variant="outline" asChild className="rounded-none border-2 border-foreground hover:bg-secondary font-bold uppercase tracking-widest text-xs">
                                 <Link href="/profile">
                                     Manage Profiles
                                 </Link>
@@ -305,7 +310,7 @@ export default function DashboardPage() {
                         <CardContent>
                             <div className="grid gap-4 md:grid-cols-2">
                                 {/* LeetCode Card */}
-                                <div className="flex items-center justify-between p-4 border rounded-lg bg-card/50">
+                                <div className="flex items-center justify-between p-4 border-4 border-foreground rounded-none bg-background shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                                     <div className="flex items-center gap-4">
                                         <div className="h-10 w-10 rounded-full bg-orange-500/10 flex items-center justify-center">
                                             <Code2 className="h-5 w-5 text-orange-500" />
@@ -330,19 +335,19 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     {hasLeetCodeLinked ? (
-                                        <Badge variant="secondary" className="bg-green-500/10 text-green-500">
-                                            <CheckCircle className="h-3 w-3 mr-1" />
-                                            Linked
+                                        <Badge variant="secondary" className="rounded-none border-2 border-foreground bg-primary/20 text-foreground font-mono uppercase tracking-widest">
+                                            <CheckCircle className="h-4 w-4 mr-2" />
+                                            Active
                                         </Badge>
                                     ) : (
-                                        <Button variant="ghost" size="sm" asChild>
+                                        <Button variant="ghost" size="sm" asChild className="rounded-none border-2 border-foreground uppercase font-bold text-xs">
                                             <Link href="/profile">Link</Link>
                                         </Button>
                                     )}
                                 </div>
 
                                 {/* GitHub Card */}
-                                <div className="flex items-center justify-between p-4 border rounded-lg bg-card/50">
+                                <div className="flex items-center justify-between p-4 border-4 border-foreground rounded-none bg-background shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                                     <div className="flex items-center gap-4">
                                         <div className="h-10 w-10 rounded-full bg-foreground/10 flex items-center justify-center">
                                             <Github className="h-5 w-5" />
@@ -367,12 +372,12 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     {hasGitHubLinked ? (
-                                        <Badge variant="secondary" className="bg-green-500/10 text-green-500">
-                                            <CheckCircle className="h-3 w-3 mr-1" />
-                                            Linked
+                                        <Badge variant="secondary" className="rounded-none border-2 border-foreground bg-primary/20 text-foreground font-mono uppercase tracking-widest">
+                                            <CheckCircle className="h-4 w-4 mr-2" />
+                                            Active
                                         </Badge>
                                     ) : (
-                                        <Button variant="ghost" size="sm" asChild>
+                                        <Button variant="ghost" size="sm" asChild className="rounded-none border-2 border-foreground uppercase font-bold text-xs">
                                             <Link href="/profile">Link</Link>
                                         </Button>
                                     )}
@@ -381,7 +386,7 @@ export default function DashboardPage() {
 
                             {/* Verification Info */}
                             {hasLeetCodeLinked && (
-                                <div className="mt-4 p-3 bg-primary/5 border border-primary/20 rounded-lg">
+                                <div className="mt-6 p-4 bg-primary/20 border-4 border-foreground rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                                     <div className="flex gap-3">
                                         <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                                             <CheckCircle className="h-4 w-4 text-primary" />

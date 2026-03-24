@@ -73,7 +73,7 @@ const algorithmCategories = [
         title: "Tree Algorithms",
         description: "Visualize tree structures and traversal methods",
         icon: GitBranch,
-        color: "from-rose-500 to-red-500",
+        color: "from-violet-500 to-fuchsia-500",
         algorithms: [
             { name: "Binary Search Tree", complexity: "O(log n)", slug: "bst" },
             { name: "Tree Traversals", complexity: "O(n)", slug: "tree-traversals" },

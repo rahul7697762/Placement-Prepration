@@ -209,7 +209,7 @@ export default function DsaPatternsPage() {
                                                             <div className="col-span-4 md:col-span-3 text-right">
                                                                 <span className={`text-xs font-medium px-2 py-1 rounded-full border ${problem.difficulty === 'Easy' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
                                                                     problem.difficulty === 'Medium' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' :
-                                                                        'bg-red-500/10 text-red-500 border-red-500/20'
+                                                                        'bg-fuchsia-500/10 text-fuchsia-500 border-fuchsia-500/20'
                                                                     }`}>
                                                                     {problem.difficulty}
                                                                 </span>

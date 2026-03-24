@@ -27,7 +27,7 @@ const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
         case "Easy": return "bg-green-500/20 text-green-500 border-green-500/30";
         case "Medium": return "bg-yellow-500/20 text-yellow-500 border-yellow-500/30";
-        case "Hard": return "bg-red-500/20 text-red-500 border-red-500/30";
+        case "Hard": return "bg-fuchsia-500/20 text-fuchsia-500 border-fuchsia-500/30";
         default: return "bg-muted text-muted-foreground";
     }
 };
@@ -216,7 +216,7 @@ export default function BlogPostContent() {
                                             <div className="text-sm text-muted-foreground">Easy</div>
                                         </div>
                                         <div className="text-center">
-                                            <div className="text-3xl font-bold text-red-500">7</div>
+                                            <div className="text-3xl font-bold text-fuchsia-500">7</div>
                                             <div className="text-sm text-muted-foreground">Hard</div>
                                         </div>
                                     </div>

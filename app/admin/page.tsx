@@ -166,7 +166,7 @@ export default function AdminDashboard() {
                                     <div className="flex items-center gap-2">
                                         <span className="font-mono text-xs text-muted-foreground bg-slate-100 px-1.5 py-0.5 rounded">{q.id}</span>
                                         <h3 className="font-semibold text-sm md:text-base">{q.title}</h3>
-                                        <Badge variant="outline" className={`text-[10px] h-5 ${q.difficulty === 'Easy' ? 'text-green-600 bg-green-50' : q.difficulty === 'Medium' ? 'text-yellow-600 bg-yellow-50' : 'text-red-600 bg-red-50'}`}>
+                                        <Badge variant="outline" className={`text-[10px] h-5 ${q.difficulty === 'Easy' ? 'text-green-600 bg-green-50' : q.difficulty === 'Medium' ? 'text-yellow-600 bg-yellow-50' : 'text-fuchsia-600 bg-fuchsia-50'}`}>
                                             {q.difficulty}
                                         </Badge>
                                     </div>

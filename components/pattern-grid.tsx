@@ -48,12 +48,12 @@ export function PatternGrid() {
                         transition={{ delay: index * 0.05 }}
                     >
                         <Link href={`/patterns/${pattern.slug}`}>
-                            <Card className="flex items-center gap-4 p-4 hover:bg-accent/50 transition-colors cursor-pointer border-border/50 hover:border-primary/50 h-full">
-                                <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
-                                    <Icon className="w-5 h-5" />
+                            <Card className="flex items-center gap-4 p-4 transition-transform duration-200 hover:-translate-y-1 hover:translate-x-1 cursor-pointer rounded-none border-4 border-foreground bg-background brutalist-shadow hover:brutalist-shadow-sm h-full group">
+                                <div className="p-3 border-2 border-foreground bg-secondary text-foreground shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                                    <Icon className="w-6 h-6" />
                                 </div>
                                 <div className="flex flex-col min-w-0">
-                                    <span className="font-medium truncate">{pattern.title}</span>
+                                    <span className="font-mono uppercase font-bold tracking-widest text-sm truncate">{pattern.title}</span>
                                 </div>
                             </Card>
                         </Link>

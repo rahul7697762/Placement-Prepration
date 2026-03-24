@@ -35,9 +35,21 @@ const blogPosts = [
         tags: ["DSA", "Interview", "Placement", "FAANG", "LeetCode"],
         featured: false,
     },
+    {
+        id: "nodejs-expressjs-interview-questions-2025",
+        title: "Top 50 Node.js & Express.js Interview Questions & Answers 2025",
+        excerpt: "Ace your backend developer interviews with 50 expertly curated Node.js and Express.js interview questions covering the event loop, streams, middleware, async/await, REST APIs, authentication, and more — with code examples.",
+        coverImage: "/blog/nodejs-expressjs-banner.png",
+        author: "prep4place Team",
+        date: "March 24, 2025",
+        readTime: "18 min read",
+        category: "Backend",
+        tags: ["Node.js", "Express.js", "Backend", "Interview Prep", "JavaScript"],
+        featured: false,
+    },
 ];
 
-const categories = ["All", "DSA", "System Design", "Interview Tips", "Resume", "Career"];
+const categories = ["All", "DSA", "Backend", "System Design", "Interview Tips", "Resume", "Career"];
 
 export default function BlogPage() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -183,7 +195,7 @@ export default function BlogPage() {
                                         <article className="group h-full flex flex-col rounded-2xl overflow-hidden bg-card border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1">
                                             <div className="relative h-48 bg-gradient-to-br from-primary/20 via-purple-500/20 to-pink-500/20">
                                                 <div className="absolute inset-0 flex items-center justify-center">
-                                                    <div className="text-6xl">{post.category === "DSA" ? "🧩" : post.category === "System Design" ? "🏗️" : post.category === "Resume" ? "📄" : "💡"}</div>
+                                                    <div className="text-6xl">{post.category === "DSA" ? "🧩" : post.category === "System Design" ? "🏗️" : post.category === "Backend" ? "⚙️" : post.category === "Resume" ? "📄" : "💡"}</div>
                                                 </div>
                                                 <div className="absolute top-4 left-4">
                                                     <Badge variant="secondary" className="bg-background/80 backdrop-blur-sm">

@@ -160,7 +160,7 @@ export function GridVisualizer() {
                     <h3 className="text-lg font-semibold">BFS Visualizer</h3>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1"><div className="w-3 h-3 bg-green-500 rounded-sm"></div>Start</div>
-                        <div className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500 rounded-sm"></div>End</div>
+                        <div className="flex items-center gap-1"><div className="w-3 h-3 bg-fuchsia-500 rounded-sm"></div>End</div>
                         <div className="flex items-center gap-1"><div className="w-3 h-3 bg-primary rounded-sm"></div>Wall</div>
                         <div className="flex items-center gap-1"><div className="w-3 h-3 bg-blue-400 rounded-sm"></div>Visited</div>
                         <div className="flex items-center gap-1"><div className="w-3 h-3 bg-yellow-400 rounded-sm"></div>Path</div>
@@ -192,7 +192,7 @@ export function GridVisualizer() {
                                 node.type === "empty" && "bg-background shadow-sm",
                                 node.type === "wall" && "bg-primary shadow-inner scale-90",
                                 node.type === "start" && "bg-green-500 shadow-lg scale-110 z-10",
-                                node.type === "end" && "bg-red-500 shadow-lg scale-110 z-10",
+                                node.type === "end" && "bg-fuchsia-500 shadow-lg scale-110 z-10",
                                 node.type === "visited" && "bg-blue-400/50 animate-in fade-in zoom-in duration-300",
                                 node.type === "path" && "bg-yellow-400 shadow-lg scale-105 animate-in fade-in zoom-in duration-300"
                             )}

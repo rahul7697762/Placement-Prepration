@@ -131,7 +131,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     <div className="p-6 md:p-8">
                         {/* Emotional Header */}
                         <div className="text-center mb-6">
-                            <div className="w-16 h-16 bg-gradient-to-br from-pink-500 via-red-500 to-orange-400 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-pink-500/30 animate-pulse">
+                            <div className="w-16 h-16 bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-violet-500/30 animate-pulse">
                                 <span className="text-3xl">💝</span>
                             </div>
                             <h2 className="text-2xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-primary bg-clip-text text-transparent mb-2">
@@ -316,7 +316,7 @@ export function FeedbackButton() {
                 <div className="fixed bottom-24 right-6 z-50 animate-in slide-in-from-right fade-in duration-500">
                     <div className="bg-card border border-border rounded-2xl shadow-2xl p-5 max-w-xs relative overflow-hidden">
                         {/* Gradient background accent */}
-                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-pink-500 via-red-500 to-orange-400" />
+                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500" />
 
                         {/* Close button */}
                         <button
@@ -328,7 +328,7 @@ export function FeedbackButton() {
 
                         {/* Content */}
                         <div className="flex items-start gap-3 pt-2">
-                            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 via-red-500 to-orange-400 rounded-full flex items-center justify-center shadow-lg shadow-pink-500/30 flex-shrink-0">
+                            <div className="w-12 h-12 bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg shadow-violet-500/30 flex-shrink-0">
                                 <span className="text-xl">💝</span>
                             </div>
                             <div className="flex-1">
@@ -342,7 +342,7 @@ export function FeedbackButton() {
                                 <div className="flex gap-2">
                                     <button
                                         onClick={handleOpenFeedback}
-                                        className="flex-1 px-3 py-2 bg-gradient-to-r from-pink-500 to-orange-400 text-white text-sm font-medium rounded-lg hover:shadow-lg hover:shadow-pink-500/30 transition-all hover:scale-[1.02]"
+                                        className="flex-1 px-3 py-2 bg-gradient-to-r from-pink-500 to-orange-400 text-white text-sm font-medium rounded-lg hover:shadow-lg hover:shadow-violet-500/30 transition-all hover:scale-[1.02]"
                                     >
                                         💬 Give Feedback
                                     </button>
@@ -362,7 +362,7 @@ export function FeedbackButton() {
             {/* Floating Button */}
             <button
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-6 right-6 z-40 p-4 bg-gradient-to-r from-pink-500 via-red-500 to-orange-400 text-white rounded-full shadow-lg shadow-pink-500/40 hover:shadow-xl hover:shadow-pink-500/50 hover:scale-110 transition-all duration-300 group animate-pulse hover:animate-none"
+                className="fixed bottom-6 right-6 z-40 p-4 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-white rounded-full shadow-lg shadow-violet-500/40 hover:shadow-xl hover:shadow-violet-500/50 hover:scale-110 transition-all duration-300 group animate-pulse hover:animate-none"
                 aria-label="Open Feedback Form"
             >
                 <span className="text-2xl">💝</span>

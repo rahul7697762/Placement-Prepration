@@ -253,10 +253,10 @@ export default function CodingStatsPage() {
                                             {/* Hard */}
                                             <div className="space-y-2">
                                                 <div className="flex justify-between text-sm">
-                                                    <span className="text-red-500 font-medium">Hard</span>
+                                                    <span className="text-fuchsia-500 font-medium">Hard</span>
                                                     <span className="text-muted-foreground">{leetcodeStats.hardSolved} solved</span>
                                                 </div>
-                                                <Progress value={hardProgress} className="h-2 bg-red-500/20" />
+                                                <Progress value={hardProgress} className="h-2 bg-fuchsia-500/20" />
                                             </div>
                                         </div>
                                     </div>

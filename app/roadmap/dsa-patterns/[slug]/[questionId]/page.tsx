@@ -161,7 +161,7 @@ export default function ProblemDetailPage() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <Badge variant="outline" className={`${question.difficulty === 'Easy' ? 'text-green-600 bg-green-50' : question.difficulty === 'Medium' ? 'text-yellow-600 bg-yellow-50' : 'text-red-600 bg-red-50'}`}>
+                        <Badge variant="outline" className={`${question.difficulty === 'Easy' ? 'text-green-600 bg-green-50' : question.difficulty === 'Medium' ? 'text-yellow-600 bg-yellow-50' : 'text-fuchsia-600 bg-fuchsia-50'}`}>
                             {question.difficulty}
                         </Badge>
                         <Button

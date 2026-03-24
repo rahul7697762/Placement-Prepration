@@ -45,77 +45,70 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-background relative overflow-hidden">
-      {/* Hero Background Image */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: 'url(/landing-bg.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
+      {/* Neo-brutalist Background Pattern */}
+      <div className="absolute inset-0 z-0 bg-background" />
+      <div 
+        className="absolute inset-0 z-0 opacity-20 pointer-events-none" 
+        style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, var(--foreground) 1px, transparent 0)', backgroundSize: '32px 32px' }} 
       />
-      {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-background/85 dark:bg-background/90 z-0" />
-
-      {/* Background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/20 rounded-full blur-[120px] z-0 opacity-50 pointer-events-none" />
 
       {/* Hero Section */}
       <section className="container mx-auto px-6 md:px-12 py-24 md:py-32 text-center relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-8 max-w-5xl mx-auto"
+          initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="space-y-8 max-w-6xl mx-auto"
         >
-          <div className="flex justify-center">
-            <Badge variant="secondary" className="px-4 py-2 text-sm rounded-full border-primary/20 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
-              <span className="flex h-2 w-2 rounded-full bg-primary mr-2 animate-pulse"></span>
-              The All-in-One Interview Prep Platform
+          <div className="flex justify-center mb-6">
+            <Badge variant="secondary" className="px-5 py-2.5 text-xs rounded-none border-2 border-foreground bg-primary/10 text-primary uppercase font-mono tracking-widest brutalist-shadow-sm">
+              <span className="flex h-2.5 w-2.5 bg-primary border border-foreground border-solid mr-3 animate-pulse"></span>
+              System Ready: V2.0
             </Badge>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 leading-tight">
-            Crack Your Tech Interview <br className="hidden md:block" /> with <span className="text-primary">Confidence</span>
+          <h1 className="text-6xl sm:text-7xl md:text-9xl font-black uppercase tracking-tighter text-foreground leading-[0.9] pb-2">
+            Crack Your <br className="hidden md:block" /> Tech Interview <br className="hidden md:block" />
+            <span className="text-primary tracking-tighter bg-foreground px-6 py-2 inline-block -skew-y-3 mt-4 brutalist-shadow transition-transform hover:skew-y-0">WITH CONFIDENCE</span>
           </h1>
 
-          <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            Master DSA patterns, build ATS-friendly resumes, and practice coding in one unified platform. Stop grinding randomly—start preparing strategically.
+          <p className="text-xl md:text-2xl text-foreground font-mono leading-relaxed max-w-3xl mx-auto border-l-8 border-primary pl-8 my-10 bg-background/50 backdrop-blur pb-2 pt-2 text-left">
+            &gt; Master DSA patterns, build ATS-friendly resumes, and practice coding in one unified platform_ <br />
+            &gt; Stop grinding randomly. Start preparing strategically.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Button size="lg" className="h-14 px-8 text-lg w-full sm:w-auto rounded-xl shadow-lg shadow-primary/20" asChild>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6">
+            <Button size="lg" className="h-16 px-10 text-xl w-full sm:w-auto rounded-none border-2 border-foreground bg-primary text-primary-foreground brutalist-shadow-hover font-bold uppercase tracking-widest" asChild>
               <Link href="/patterns">
-                Start Learning Patterns <ArrowRight className="ml-2 h-5 w-5" />
+                Start Learning <ArrowRight className="ml-3 h-6 w-6" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto rounded-xl border-2" asChild>
+            <Button size="lg" variant="outline" className="h-16 px-10 text-xl w-full sm:w-auto rounded-none border-2 border-foreground bg-secondary text-secondary-foreground brutalist-shadow-hover font-bold uppercase tracking-widest" asChild>
               <Link href="/resume-builder">
-                Build My Resume
+                Build Resume
               </Link>
             </Button>
           </div>
 
           {/* Feature Pills */}
-          <div className="pt-12 flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-lg border border-border/50">
-              <Code2 className="w-4 h-4 text-primary" />
+          <div className="pt-20 flex flex-wrap justify-center gap-5 text-xs md:text-sm font-mono tracking-wider font-bold uppercase">
+            <div className="flex items-center gap-3 bg-card px-5 py-3 border-2 border-foreground brutalist-shadow-sm hover:-translate-y-1 hover:brutalist-shadow transition-transform">
+              <Code2 className="w-5 h-5 text-primary" />
               <span>DSA Patterns</span>
             </div>
-            <div className="flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-lg border border-border/50">
-              <FileText className="w-4 h-4 text-primary" />
+            <div className="flex items-center gap-3 bg-card px-5 py-3 border-2 border-foreground brutalist-shadow-sm hover:-translate-y-1 hover:brutalist-shadow transition-transform">
+              <FileText className="w-5 h-5 text-secondary" />
               <span>Resume Builder</span>
             </div>
-            <div className="flex items-center gap-2 bg-gradient-to-r from-primary/20 to-purple-500/20 px-4 py-2 rounded-lg border border-primary/30 relative">
-              <Mic className="w-4 h-4 text-primary" />
-              <span className="font-medium text-foreground">AI Interview</span>
-              <span className="text-[10px] px-1.5 py-0.5 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full font-semibold">
+            <div className="flex items-center gap-3 bg-accent px-5 py-3 border-2 border-foreground brutalist-shadow-sm hover:-translate-y-1 hover:brutalist-shadow transition-transform relative text-accent-foreground">
+              <Mic className="w-5 h-5 text-foreground" />
+              <span>AI Interview</span>
+              <span className="absolute -top-3 -right-3 px-2 py-0.5 border-2 border-foreground bg-primary text-primary-foreground text-[10px] transform rotate-[15deg]">
                 NEW
               </span>
             </div>
-            <div className="flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-lg border border-border/50">
-              <Terminal className="w-4 h-4 text-primary" />
+            <div className="flex items-center gap-3 bg-card px-5 py-3 border-2 border-foreground brutalist-shadow-sm hover:-translate-y-1 hover:brutalist-shadow transition-transform">
+              <Terminal className="w-5 h-5 text-chart-3" />
               <span>Online Compiler</span>
             </div>
           </div>
@@ -123,12 +116,16 @@ export default function Home() {
       </section>
 
       {/* Main Features Grid */}
-      <section className="bg-secondary/20 py-24 relative z-10">
-        <div className="container mx-auto px-6 md:px-12">
-          <div className="text-center mb-16 space-y-4">
-            <h2 className="text-3xl md:text-5xl font-bold">Everything you need to succeed</h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              We've gathered the essential tools for your placement journey in one place.
+      <section className="bg-background py-24 relative z-10 border-t-8 border-foreground border-b-8">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-secondary border-b-8 border-l-8 border-foreground -translate-y-1" />
+        <div className="container mx-auto px-6 md:px-12 relative">
+          <div className="text-left mb-16 space-y-6 max-w-4xl border-2 border-foreground p-8 bg-card brutalist-shadow mt-12">
+            <div className="inline-block px-3 py-1 bg-primary text-primary-foreground font-mono text-sm uppercase tracking-widest border-2 border-foreground mb-4">
+              /// MODULE_01
+            </div>
+            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">Everything You Need To Succeed</h2>
+            <p className="text-foreground font-mono text-lg max-w-2xl border-l-4 border-primary pl-4">
+              We've gathered the essential tools for your placement journey in one unified, high-performance interface.
             </p>
           </div>
 
@@ -139,40 +136,35 @@ export default function Home() {
                 title: "Pattern-Based Learning",
                 description: "Don't memorize solutions. Learn the 20+ patterns that solve 95% of coding interview questions.",
                 link: "/patterns",
-                color: "text-blue-500",
-                bg: "bg-blue-500/10"
+                theme: "bg-background text-foreground"
               },
               {
                 icon: FileText,
                 title: "Smart Resume Builder",
-                description: "Create professional, ATS-optimized resumes. Import from PDF or start from scratch with premium templates.",
+                description: "Create professional, ATS-optimized resumes. Import from PDF or start from scratch with solid layouts.",
                 link: "/resume-builder",
-                color: "text-purple-500",
-                bg: "bg-purple-500/10"
+                theme: "bg-secondary text-secondary-foreground"
               },
               {
                 icon: Terminal,
                 title: "Online Compiler",
-                description: "Practice coding instantly in Python, C++, Java, and more with our zero-setup online IDE.",
+                description: "Practice coding instantly in Python, C++, Java, and more with our zero-setup online terminal.",
                 link: "/compiler",
-                color: "text-green-500",
-                bg: "bg-green-500/10"
+                theme: "bg-background text-foreground"
               },
               {
                 icon: Map,
                 title: "Interactive Roadmaps",
                 description: "Structured learning paths to guide you from beginner to interview-ready developer.",
                 link: "/roadmap",
-                color: "text-orange-500",
-                bg: "bg-orange-500/10"
+                theme: "bg-accent text-accent-foreground"
               },
               {
                 icon: Mic,
                 title: "AI Mock Interview",
-                description: "Practice with our AI interviewer. Get real-time feedback on technical skills, communication, and body language.",
+                description: "Practice with our AI interviewer. Get real-time feedback on technical skills and system design.",
                 link: "/interview",
-                color: "text-violet-500",
-                bg: "bg-gradient-to-br from-violet-500/20 to-purple-500/20",
+                theme: "bg-primary text-primary-foreground",
                 isNew: true
               },
               {
@@ -180,37 +172,33 @@ export default function Home() {
                 title: "Peer Community",
                 description: "Connect with other aspirants, share interview experiences, and get mock interview practice.",
                 link: "/community",
-                color: "text-cyan-500",
-                bg: "bg-cyan-500/10"
+                theme: "bg-background text-foreground"
               }
             ].map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: -20, y: 20 }}
+                whileInView={{ opacity: 1, x: 0, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className={`group relative bg-background p-8 rounded-3xl border transition-all hover:shadow-lg hover:-translate-y-1 ${'isNew' in feature && feature.isNew
-                  ? "border-violet-500/50 hover:border-violet-500 ring-1 ring-violet-500/20"
-                  : "hover:border-primary/50"
-                  }`}
+                className={`group relative p-8 border-4 border-foreground transition-all duration-200 hover:-translate-y-2 hover:-translate-x-2 ${feature.theme} brutalist-shadow-sm hover:brutalist-shadow`}
               >
                 {'isNew' in feature && feature.isNew && (
-                  <div className="absolute -top-3 right-6 px-3 py-1 bg-gradient-to-r from-violet-600 to-purple-600 text-white text-xs font-bold rounded-full shadow-lg">
-                    ✨ NEW
+                  <div className="absolute -top-4 -right-4 px-3 py-1 bg-accent text-accent-foreground border-2 border-foreground font-mono font-bold text-sm transform rotate-[10deg] brutalist-shadow-sm">
+                    /// NEW
                   </div>
                 )}
                 <Link href={feature.link} className="absolute inset-0 z-10">
                   <span className="sr-only">Go to {feature.title}</span>
                 </Link>
-                <div className={`w-14 h-14 ${feature.bg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                  <feature.icon className={`w-7 h-7 ${feature.color}`} />
+                <div className="w-16 h-16 border-2 border-current flex items-center justify-center mb-8 rotate-3 group-hover:-rotate-3 transition-transform bg-transparent">
+                  <feature.icon className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 flex items-center gap-2">
+                <h3 className="text-2xl font-bold uppercase tracking-tight mb-4 flex items-center justify-between">
                   {feature.title}
-                  {feature.link !== "#" && <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-muted-foreground" />}
+                  {feature.link !== "#" && <ArrowRight className="w-6 h-6 ml-2" />}
                 </h3>
-                <p className="text-muted-foreground leading-relaxed">
+                <p className="font-mono text-sm leading-relaxed border-t-2 border-current pt-4">
                   {feature.description}
                 </p>
               </motion.div>
@@ -223,13 +211,16 @@ export default function Home() {
       <section className="container mx-auto px-6 md:px-12 py-24 md:py-32 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-8 order-2 md:order-1">
-            <h2 className="text-3xl md:text-5xl font-bold leading-tight">
-              Build a Resume that gets <span className="text-primary">Shortlisted</span>
+            <div className="inline-block px-3 py-1 bg-secondary text-secondary-foreground font-mono text-sm uppercase tracking-widest border-2 border-foreground mb-4">
+              /// MODULE_02 
+            </div>
+            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9]">
+              Build A Resume That Gets <span className="text-primary tracking-tighter mix-blend-difference bg-foreground px-4 py-1.5 inline-block -skew-y-2 mt-2">SHORTLISTED</span>
             </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-foreground font-mono leading-relaxed border-l-4 border-foreground pl-4">
               Most candidates get rejected because of poor resume formatting. Our builder ensures your resume is:
             </p>
-            <ul className="space-y-4">
+            <ul className="space-y-4 font-mono font-medium">
               {[
                 "ATS-Friendly (Applicant Tracking System)",
                 "Professionally designed templates",
@@ -237,57 +228,62 @@ export default function Home() {
                 "Real-time preview and editing"
               ].map((item, i) => (
                 <li key={i} className="flex items-center gap-3">
-                  <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="font-medium">{item}</span>
+                  <div className="h-4 w-4 bg-primary border-2 border-foreground" />
+                  <span className="uppercase">{item}</span>
                 </li>
               ))}
             </ul>
-            <Button size="lg" className="rounded-xl px-8" asChild>
+            <Button size="lg" className="h-16 px-10 text-xl rounded-none border-2 border-foreground bg-primary text-primary-foreground brutalist-shadow-hover hover:bg-primary uppercase font-bold tracking-widest" asChild>
               <Link href="/resume-builder">
-                Create Free Resume
+                Build Resume Free
               </Link>
             </Button>
           </div>
 
-          <div className="relative order-1 md:order-2 bg-gradient-to-tr from-primary/10 via-secondary to-background p-8 rounded-3xl border border-border/50">
-            {/* Abstract representation of a resume builder */}
-            <div className="bg-background rounded-xl shadow-2xl p-6 border space-y-4 opacity-90 rotate-2 hover:rotate-0 transition-transform duration-500">
-              <div className="flex gap-4 mb-6 border-b pb-4">
-                <div className="h-16 w-16 bg-muted rounded-full" />
-                <div className="space-y-2 flex-1">
-                  <div className="h-4 w-1/2 bg-foreground/80 rounded" />
-                  <div className="h-3 w-1/3 bg-muted-foreground/50 rounded" />
+          <div className="relative order-1 md:order-2 bg-accent p-8 border-4 border-foreground brutalist-shadow-sm group mt-10 md:mt-0">
+            {/* Abstract representation of a brutalist resume builder */}
+            <div className="bg-background border-4 border-foreground p-6 space-y-4 brutalist-shadow rotate-3 group-hover:rotate-0 transition-transform duration-300">
+              <div className="flex gap-4 mb-6 border-b-4 border-foreground pb-4">
+                <div className="h-16 w-16 bg-secondary border-2 border-foreground" />
+                <div className="space-y-3 flex-1">
+                  <div className="h-6 w-1/2 bg-foreground" />
+                  <div className="h-4 w-1/3 bg-foreground/60" />
                 </div>
               </div>
-              <div className="space-y-3">
-                <div className="h-2 w-full bg-muted rounded" />
-                <div className="h-2 w-full bg-muted rounded" />
-                <div className="h-2 w-3/4 bg-muted rounded" />
+              <div className="space-y-4">
+                <div className="h-3 w-full bg-foreground/80" />
+                <div className="h-3 w-full bg-foreground/80" />
+                <div className="h-3 w-3/4 bg-foreground/80" />
               </div>
-              <div className="grid grid-cols-2 gap-4 pt-4">
-                <div className="h-24 bg-primary/5 rounded border border-dashed border-primary/20 flex items-center justify-center text-xs text-primary">
+              <div className="grid grid-cols-2 gap-4 pt-6">
+                <div className="h-28 bg-primary/10 border-2 border-foreground border-dashed flex items-center justify-center text-sm font-mono uppercase font-bold text-foreground">
                   Skills Section
                 </div>
-                <div className="h-24 bg-primary/5 rounded border border-dashed border-primary/20 flex items-center justify-center text-xs text-primary">
+                <div className="h-28 bg-secondary/10 border-2 border-foreground border-dashed flex items-center justify-center text-sm font-mono uppercase font-bold text-foreground">
                   Experience
                 </div>
               </div>
             </div>
+            {/* Decorative background elements */}
+            <div className="absolute -z-10 -bottom-6 -left-6 w-full h-full bg-[url('/grid.svg')] border-4 border-foreground" />
           </div>
         </div>
       </section>
 
       {/* Patterns Grid Section */}
-      <section className="bg-secondary/20 py-24 relative z-10">
+      <section className="bg-foreground text-background py-24 relative z-10 border-t-8 border-background border-b-8">
         <div className="container mx-auto px-6 md:px-12 space-y-12">
-          <div className="flex flex-col md:flex-row items-end justify-between gap-4">
-            <div className="space-y-2 max-w-2xl">
-              <h2 className="text-3xl md:text-5xl font-bold">Master Core Patterns</h2>
-              <p className="text-muted-foreground text-lg">Stop solving random problems. Learn the underlying patterns that connect them.</p>
+          <div className="flex flex-col md:flex-row items-end justify-between gap-6">
+            <div className="space-y-4 max-w-2xl">
+              <div className="inline-block px-3 py-1 bg-primary text-primary-foreground font-mono text-sm uppercase tracking-widest border-2 border-background mb-2">
+                /// MODULE_03
+              </div>
+              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter line-clamp-2 leading-[0.9]">Master Core <br/>Patterns</h2>
+              <p className="text-background/80 font-mono text-lg border-l-4 border-primary pl-4">Stop solving random problems. Learn the underlying structural patterns.</p>
             </div>
-            <Button variant="outline" className="group" asChild>
+            <Button variant="outline" className="h-14 px-8 rounded-none border-4 border-background bg-secondary text-secondary-foreground hover:bg-background hover:text-foreground font-bold uppercase tracking-widest brutalist-shadow-sm transition-transform hover:-translate-y-1" asChild>
               <Link href="/patterns">
-                View All Patterns <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                View All Patterns <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           </div>
@@ -297,63 +293,60 @@ export default function Home() {
       </section>
 
       {/* Featured Blog Section */}
-      <section className="container mx-auto px-6 md:px-12 py-24 relative z-10">
-        <div className="text-center mb-12 space-y-4">
-          <Badge variant="outline" className="px-4 py-2 text-sm bg-primary/10 border-primary/20">
-            📚 Latest from Our Blog
+      <section className="container mx-auto px-6 md:px-12 py-24 relative z-10 border-b-8 border-foreground">
+        <div className="text-center mb-16 space-y-6">
+          <Badge variant="outline" className="px-5 py-2.5 text-xs rounded-none border-2 border-foreground bg-accent/20 text-foreground uppercase font-mono tracking-widest brutalist-shadow-sm inline-flex">
+            <span>[ SYSTEM_LOGS :: BLOG ]</span>
           </Badge>
-          <h2 className="text-3xl md:text-5xl font-bold">Interview Preparation Guides</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Expert insights and strategies to help you ace your tech interviews
-          </p>
+          <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter">Interview Preparation Guides</h2>
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.98 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           className="max-w-5xl mx-auto"
         >
-          <Link href="/blog/blind-75-leetcode-problems-complete-guide-2025">
-            <article className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10 border border-border/50 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10">
+          <Link href="/blog/blind-75-leetcode-problems-complete-guide-2025" className="block outline-none">
+            <article className="group relative bg-background border-4 border-foreground hover:-translate-y-2 hover:-translate-x-2 transition-transform duration-300 brutalist-shadow-sm hover:brutalist-shadow">
               <div className="grid md:grid-cols-5 gap-0">
                 {/* Image Section */}
-                <div className="md:col-span-2 relative h-64 md:h-auto bg-gradient-to-br from-purple-900 via-blue-900 to-purple-900 overflow-hidden">
-                  <div className="absolute inset-0 bg-[url('/blog/blind-75-banner.png')] bg-cover bg-center group-hover:scale-105 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/20" />
+                <div className="md:col-span-2 relative h-64 md:h-auto border-b-4 md:border-b-0 md:border-r-4 border-foreground bg-primary/20 overflow-hidden">
+                  <div className="absolute inset-0 bg-[url('/blog/blind-75-banner.png')] bg-cover bg-center mix-blend-multiply grayscale contrast-150 group-hover:grayscale-0 transition-all duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-primary/40 to-transparent mix-blend-overlay" />
                   <div className="absolute top-4 left-4">
-                    <Badge className="bg-primary/90 text-primary-foreground border-none backdrop-blur-sm">
-                      ⭐ Featured
+                    <Badge className="rounded-none bg-primary text-primary-foreground border-2 border-foreground uppercase font-mono font-bold tracking-widest text-[10px] brutalist-shadow-sm">
+                      FEATURED_POST
                     </Badge>
                   </div>
                 </div>
 
                 {/* Content Section */}
-                <div className="md:col-span-3 p-8 md:p-12 flex flex-col justify-center">
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <Badge variant="secondary" className="text-xs">Blind 75</Badge>
-                    <Badge variant="secondary" className="text-xs">LeetCode</Badge>
-                    <Badge variant="secondary" className="text-xs">Interview Prep</Badge>
+                <div className="md:col-span-3 p-8 md:p-12 flex flex-col justify-center bg-[url('/grid.svg')] bg-opacity-5">
+                  <div className="flex flex-wrap gap-3 mb-6 font-mono">
+                    <Badge variant="secondary" className="rounded-none border-2 border-foreground uppercase text-xs">Blind 75</Badge>
+                    <Badge variant="secondary" className="rounded-none border-2 border-foreground uppercase text-xs">LeetCode</Badge>
+                    <Badge variant="secondary" className="rounded-none border-2 border-foreground uppercase text-xs">Interview Prep</Badge>
                   </div>
 
-                  <h3 className="text-2xl md:text-3xl font-bold mb-4 group-hover:text-primary transition-colors">
+                  <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-6 group-hover:text-primary transition-colors leading-[1.05]">
                     Blind 75 LeetCode Problems: Complete Interview Guide 2025
                   </h3>
 
-                  <p className="text-muted-foreground mb-6 line-clamp-3 leading-relaxed">
-                    Master the most efficient curated list of 75 LeetCode problems to crack coding interviews at Google, Amazon, Microsoft, and Meta. Includes 8-week study plan, categorized problems, and expert tips.
+                  <p className="font-mono text-sm leading-relaxed mb-8 border-l-4 border-foreground pl-4">
+                    Master the most efficient curated list of 75 LeetCode problems to crack coding interviews at Google, Amazon, Microsoft, and Meta.
                   </p>
 
-                  <div className="flex items-center gap-6 text-sm text-muted-foreground mb-6">
-                    <span>📅 Jan 25, 2025</span>
-                    <span>⏱️ 20 min read</span>
-                    <span>✍️ prep4place Team</span>
+                  <div className="flex flex-wrap items-center gap-6 font-mono text-xs font-bold uppercase mb-8 pb-8 border-b-4 border-foreground border-dashed">
+                    <span className="flex items-center gap-2"><div className="w-2 h-2 bg-primary"/>Jan 25, 2025</span>
+                    <span className="flex items-center gap-2"><div className="w-2 h-2 bg-secondary"/>20 min read</span>
+                    <span className="flex items-center gap-2"><div className="w-2 h-2 bg-accent"/>prep4place</span>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <span className="font-medium text-primary flex items-center gap-2 group-hover:gap-3 transition-all">
-                      Read Full Guide <ArrowRight className="h-4 w-4" />
+                  <div className="flex items-center">
+                    <span className="font-bold text-foreground font-mono uppercase tracking-widest flex items-center gap-3 transition-transform group-hover:translate-x-2">
+                      Read Full Guide <ArrowRight className="h-5 w-5" />
                     </span>
                   </div>
                 </div>
@@ -362,10 +355,10 @@ export default function Home() {
           </Link>
 
           {/* Additional Blog Links */}
-          <div className="mt-8 text-center">
+          <div className="mt-12 text-center">
             <Link href="/blog">
-              <Button variant="outline" size="lg" className="group">
-                View All Blog Posts <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <Button variant="outline" size="lg" className="h-16 px-10 rounded-none border-2 border-foreground bg-background text-foreground hover:bg-secondary hover:text-secondary-foreground font-bold uppercase tracking-widest group brutalist-shadow-hover">
+                View All System Logs <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-2" />
               </Button>
             </Link>
           </div>
@@ -374,25 +367,24 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="container mx-auto px-6 md:px-12 py-24 relative z-10">
-        <div className="bg-primary rounded-[2.5rem] p-12 md:p-24 text-center text-primary-foreground relative overflow-hidden group">
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-10" />
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/20 rounded-full blur-[100px] group-hover:bg-white/30 transition-colors" />
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/20 rounded-full blur-[100px] group-hover:bg-white/30 transition-colors" />
+        <div className="bg-primary border-8 border-foreground p-12 md:p-24 text-center text-primary-foreground relative group brutalist-shadow">
+          <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')] opacity-20 pointer-events-none mix-blend-overlay" />
+          <div className="absolute top-0 left-0 w-8 h-8 border-b-4 border-r-4 border-foreground" />
+          <div className="absolute top-0 right-0 w-8 h-8 border-b-4 border-l-4 border-foreground" />
+          <div className="absolute bottom-0 left-0 w-8 h-8 border-t-4 border-r-4 border-foreground" />
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-t-4 border-l-4 border-foreground" />
 
-          <div className="relative z-10 space-y-8 max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Ready to launch your career?</h2>
-            <p className="text-primary-foreground/80 text-lg md:text-2xl font-light">
-              Join thousands of developers mastering Data Structures, Algorithms, and System Design.
+          <div className="relative z-10 space-y-10 max-w-4xl mx-auto">
+            <h2 className="text-7xl md:text-9xl font-black uppercase tracking-tighter leading-[0.8] mb-8">
+              Execute <br/> <span className="bg-foreground text-primary px-4 inline-block mt-4 -skew-y-2 brutalist-shadow">PROGRAM</span>
+            </h2>
+            <p className="text-primary-foreground font-mono text-xl md:text-2xl font-bold uppercase tracking-widest max-w-2xl mx-auto border-t-4 border-b-4 border-foreground py-6 bg-foreground/10">
+              [ Join thousands of developers mastering DSA and System Design. ]
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button size="lg" variant="secondary" className="h-16 px-10 text-lg font-semibold rounded-2xl" asChild>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
+              <Button size="lg" className="h-20 px-12 text-2xl font-black uppercase tracking-widest rounded-none bg-background text-foreground border-4 border-foreground hover:bg-secondary hover:text-secondary-foreground transition-all brutalist-shadow hover:translate-y-1 hover:translate-x-1" asChild>
                 <Link href="/patterns">
-                  Start Learning Now
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="h-16 px-10 text-lg font-semibold rounded-2xl bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary" asChild>
-                <Link href="/dashboard">
-                  Go to Dashboard
+                  Init sequence &gt;
                 </Link>
               </Button>
             </div>

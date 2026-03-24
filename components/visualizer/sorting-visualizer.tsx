@@ -363,7 +363,7 @@ export function SortingVisualizer({
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-muted-foreground">Worst Case</span>
-                                        <Badge variant="outline" className="bg-red-500/10 text-red-500 border-red-500/20">
+                                        <Badge variant="outline" className="bg-fuchsia-500/10 text-fuchsia-500 border-fuchsia-500/20">
                                             {timeComplexity.worst}
                                         </Badge>
                                     </div>

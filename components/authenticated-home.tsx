@@ -142,7 +142,7 @@ export default function AuthenticatedHome({ user }: { user: User }) {
         switch (difficulty) {
             case 'Easy': return 'text-green-500';
             case 'Medium': return 'text-yellow-500';
-            case 'Hard': return 'text-red-500';
+            case 'Hard': return 'text-fuchsia-500';
             default: return 'text-muted-foreground';
         }
     };

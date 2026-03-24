@@ -78,11 +78,13 @@ export default function CompilerPage() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-background">
+        <div className="min-h-screen flex flex-col bg-primary/5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[url('/grid.svg')] opacity-20 border-b-8 border-l-8 border-foreground pointer-events-none" />
+            
             {/* Header */}
-            <div className="border-b px-6 py-3 flex items-center justify-between bg-card">
+            <div className="border-b-4 border-foreground px-6 py-4 flex items-center justify-between bg-background z-10 relative">
                 <div className="flex items-center gap-4">
-                    <h1 className="text-lg font-semibold">Online Compiler</h1>
+                    <h1 className="text-2xl font-black uppercase tracking-tight bg-foreground text-background inline-block px-3 py-1">Virtual Compiler</h1>
                     <Select value={language.name} onValueChange={handleLanguageChange}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Select Language" />
@@ -97,31 +99,31 @@ export default function CompilerPage() {
                     </Select>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" className="rounded-none border-2 border-foreground hover:bg-secondary">
                         <Download className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" className="rounded-none border-2 border-foreground hover:bg-secondary">
                         <Settings className="h-4 w-4" />
                     </Button>
-                    <Button variant="secondary" className="gap-2" disabled>
+                    <Button variant="secondary" className="gap-2 rounded-none border-2 border-foreground font-bold uppercase text-xs" disabled>
                         <Eye className="h-4 w-4" />
                         Visualize Code
                     </Button>
-                    <Button onClick={runCode} disabled={isRunning} className="gap-2">
+                    <Button onClick={runCode} disabled={isRunning} className="gap-2 rounded-none border-2 border-foreground bg-primary text-primary-foreground brutalist-shadow-hover hover:bg-primary font-bold uppercase tracking-widest text-xs h-10 px-6">
                         {isRunning ? (
                             <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
                             <Play className="h-4 w-4" />
                         )}
-                        Run
+                        Execute
                     </Button>
                 </div>
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+            <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative z-10">
                 {/* Editor Section */}
-                <div className="flex-1 border-r flex flex-col min-h-[500px]">
+                <div className="flex-1 border-r-4 border-foreground flex flex-col min-h-[500px] bg-background">
                     <Editor
                         height="100%"
                         language={language.name === "cpp" || language.name === "c" ? "cpp" : language.name}
@@ -138,27 +140,27 @@ export default function CompilerPage() {
                 </div>
 
                 {/* Input/Output Section */}
-                <div className="w-full md:w-[40%] flex flex-col bg-muted/30">
+                <div className="w-full md:w-[40%] flex flex-col bg-background/50 backdrop-blur-sm">
                     {/* Input */}
-                    <div className="flex-1 p-4 flex flex-col gap-2 border-b">
+                    <div className="flex-1 p-6 flex flex-col gap-3 border-b-4 border-foreground">
                         <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-muted-foreground">Input</span>
+                            <span className="text-xs font-mono font-bold uppercase tracking-widest text-foreground bg-secondary px-2 py-1 border-2 border-foreground">Standard Input [stdin]</span>
                         </div>
                         <Textarea
-                            placeholder="Enter input here..."
-                            className="flex-1 font-mono resize-none bg-card"
+                            placeholder="Awaiting input stream..."
+                            className="flex-1 font-mono resize-none rounded-none border-4 border-foreground bg-primary/5 focus-visible:ring-0 focus-visible:border-primary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-sm p-4"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
                     </div>
 
                     {/* Output */}
-                    <div className="flex-1 p-4 flex flex-col gap-2">
+                    <div className="flex-1 p-6 flex flex-col gap-3">
                         <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-muted-foreground">Output</span>
+                            <span className="text-xs font-mono font-bold uppercase tracking-widest text-foreground bg-secondary px-2 py-1 border-2 border-foreground">Standard Output [stdout]</span>
                         </div>
-                        <Card className="flex-1 p-4 font-mono text-sm overflow-auto bg-card whitespace-pre-wrap">
-                            {output || <span className="text-muted-foreground italic">Run code to see output...</span>}
+                        <Card className="flex-1 p-4 font-mono text-sm overflow-auto bg-background rounded-none border-4 border-foreground shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] whitespace-pre-wrap">
+                            {output || <span className="text-muted-foreground italic opacity-50 block mt-2 ml-2">System awaiting execution...</span>}
                         </Card>
                     </div>
                 </div>
