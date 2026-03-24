@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"require\\(''''./node_modules/framer-motion/package.json''''\\)\")",
+      "Bash(npx tsc:*)",
+      "Bash(python -c \":*)"
+    ]
+  }
+}

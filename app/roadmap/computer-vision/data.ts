@@ -4,6 +4,7 @@ import { section2Data } from './data2';
 import { section3Data } from './data3';
 import { section4Data } from './data4';
 import { section5Data } from './data5';
+import { section6Data } from './data6';
 
 // Export types for use in page.tsx
 export type { Topic, Unit } from './types';
@@ -14,5 +15,6 @@ export const computerVisionData: Unit[] = [
     section2Data,
     section3Data,
     section4Data,
-    section5Data
+    section5Data,
+    section6Data
 ];

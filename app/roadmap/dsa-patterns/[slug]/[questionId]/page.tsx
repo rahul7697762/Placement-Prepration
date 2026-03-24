@@ -22,6 +22,7 @@ import {
 import { ArrowLeft, CheckCircle2, Circle, ExternalLink, PlayCircle, Code2, Loader2, AlertCircle, X, ChevronRight, FileText } from "lucide-react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
@@ -219,7 +220,7 @@ export default function ProblemDetailPage() {
                                     {solution.content && (
                                         <Card>
                                             <CardContent className="p-6 prose prose-slate max-w-none dark:prose-invert">
-                                                <ReactMarkdown>{solution.content}</ReactMarkdown>
+                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>{solution.content}</ReactMarkdown>
                                             </CardContent>
                                         </Card>
                                     )}
