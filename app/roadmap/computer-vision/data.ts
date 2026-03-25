@@ -7,7 +7,7 @@ import { section5Data } from './data5';
 import { section6Data } from './data6';
 
 // Export types for use in page.tsx
-export type { Topic, Unit } from './types';
+export type { Topic, Unit, MCQ } from './types';
 
 // Combine all sections into a single array
 export const computerVisionData: Unit[] = [
